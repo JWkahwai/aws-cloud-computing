@@ -22,7 +22,7 @@ table = 'staff'
 bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
 s3_location = (bucket_location['LocationConstraint'])
 
-@app.route("/staff", methods=['GET', 'POST'])
+@app.route("/", methods=['GET', 'POST'])
 def home():
     #Staff list
     cursor = db_conn.cursor()
