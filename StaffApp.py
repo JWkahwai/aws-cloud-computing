@@ -98,7 +98,7 @@ def AddStaff():
     titleData = "Data Added"
     return render_template('StaffOutput.html',title=titleData)
 
-@app.route("/editstaff", methods=['POST'])
+@app.route("/update", methods=['POST'])
 def EditStaff():
     staffID= request.form['getStaffID']
     name = request.form['getName']
