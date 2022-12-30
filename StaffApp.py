@@ -138,7 +138,7 @@ def EditStaff():
         try:
             
             # Upload image file in S3 #
-            image_file_name = "staff-id-" + str(name) + "_image_file"
+            image_file_name = "staff-id-" + str(staffID) + "_image_file"
             s3 = boto3.resource('s3')
 
             insert_sql = "UPDATE staff SET Name=%s, Email=%s, Phone=%s,RoleID=%s,DepartmentID=%s,Salary=%s,Status=%s WHERE StaffID=%s"
