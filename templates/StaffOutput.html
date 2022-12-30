@@ -58,8 +58,10 @@
                     }
                     }).then((result) => {
                         //timer
-                        window.location.href ="{{ url_for('staff')}}";
+                        $('#click').trigger('click');
                     })
         </script>
+       <button type="submit" class="btn btn-primary" id="click">GO BACK</button><br><br>
+        
 </body>
 </html>
