@@ -65,7 +65,7 @@
                 </div>
     
                 {% for row in staff %}
-                {%  if loop.count % 2 == 0 %}
+                {%  if row.index % 2 == 0 %}
                 <div class="card shadow mb-4" style="margin-top:2%">
                     <div class="card-body">
                         <div class="row featurette">
