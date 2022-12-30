@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>About Us</title>
+        <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+        <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.5/css/responsive.dataTables.min.css">
+        <script src="https://cdn.datatables.net/responsive/2.2.5/js/dataTables.responsive.min.js"></script>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+        <style>
+
+
+            .navbar {
+              background-color: white;
+              -webkit-box-shadow: 1px 3px 10px -5px rgba(131,163,166,1);
+              -moz-box-shadow: 1px 3px 10px -5px rgba(131,163,166,1);
+              box-shadow: 1px 3px 10px -5px rgba(131,163,166,1);
+        
+            }
+        
+            .tab {
+              display: inline-block;
+              margin-left: 30px;
+            }
+        
+            </style>
+    </head>
+    <body>
+        <script>
+            let timerInterval
+                    Swal.fire({
+                    title: '{{title}}',
+                    icon: 'success',
+                    html: 'Redirecting to staff list.', //text
+                    timer: 5000,// 1000 = 1second
+                    timerProgressBar: true,//timerProgressBar
+                    confirmButtonText:'Ok',//ConfirmButton show with text 'Ok'
+                    onBeforeOpen: () => {
+                    //	Swal.showLoading()
+                        timerInterval = setInterval(() => {
+                        const content = Swal.getContent()
+                        if (content) {
+                            const b = content.querySelector('b')
+                            if (b) {
+                                b.textContent = Math.ceil(swal.getTimerLeft() / 1000) //to get second for text
+                            }
+                        }
+                        }, 1000)
+                    },
+                    onClose: () => {
+                        clearInterval(timerInterval)
+                    }
+                    }).then((result) => {
+                        //timer
+                        window.location.href ="{{ url_for('staff')}}";
+                    })
+        </script>
+</body>
+</html>
