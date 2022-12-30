@@ -2,6 +2,7 @@ from flask import Flask, render_template, request
 from pymysql import connections
 import os
 import boto3
+import html
 from config import *
 
 app = Flask(__name__)
@@ -49,12 +50,12 @@ def about():
 
 @app.route("/addstaff", methods=['POST'])
 def AddStaff():
-    name = request.form['Name']
-    email = request.form['Email']
-    phone = request.form['Phone']
-    role = request.form['Role']
-    department = request.form['Department']
-    salary = request.form['Salary']
+    name = html.escape(request.form['Name'])
+    email = html.escape(request.form['Email'])
+    phone = html.escape(request.form['Phone'])
+    role = html.escape(request.form['Role'])
+    department = html.escape(request.form['Department'])
+    salary = html.escape(request.form['Salary'])
     image_file = request.files['image']
 
     if image_file.filename == "":
@@ -100,14 +101,14 @@ def AddStaff():
 
 @app.route("/editstaff", methods=['POST'])
 def EditStaff():
-    staffID= request.form['getStaffID']
-    name = request.form['getName']
-    email = request.form['getEmail']
-    phone = request.form['getPhone']
-    role = request.form['getRole']
-    department = request.form['getDepartment']
-    salary = request.form['getSalary']
-    status = request.form['getStatus']
+    staffID= html.escape(request.form['getStaffID'])
+    name = html.escape(request.form['getName'])
+    email = html.escape(request.form['getEmail'])
+    phone = html.escape(request.form['getPhone'])
+    role = html.escape(request.form['getRole'])
+    department = html.escape(request.form['getDepartment'])
+    salary = html.escape(request.form['getSalary'])
+    status = html.escape(request.form['getStatus'])
     image_file = request.files['edtimage']
 
     #if no image uploaded
