@@ -138,31 +138,45 @@
                     <div class="form-group row" style="margin:10px;">
                         <form action="/addstaff" autocomplete="on" method = "POST" enctype="multipart/form-data">
                         <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label>Name</label>
-                                <input type="text" name="Name" id="Name" class="form-control" required=""/> 
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1">Name</span>
+                                <input type="text" name="Name" id="Name"  class="form-control" placeholder="William Wong" aria-label="William Wong" aria-describedby="basic-addon1" required>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label>Email</label>
-                                <input type="text" name="Email" id="Email" class="form-control"  required=""/> 
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon2">Name</span>
+                                <input type="email" name="Email" id="Email" class="form-control" placeholder="william@gmail.com" aria-label="william@gmail.com" aria-describedby="basic-addon2" required>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label>Phone</label>
-                                <input type="text" name="Phone" id="Phone" class="form-control"  required=""/> 
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon3">Phone</span>
+                                <input type="text" name="Phone" id="Phone" class="form-control" placeholder="01XXXXXXXX" aria-label="01XXXXXXXX" aria-describedby="basic-addon3" required>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label>Role</label>
-                                <input type="text" name="Role" id="Role" class="form-control"  required=""/> 
+                            
+                            <div class="input-group mb-3">
+                                <label class="input-group-text" for="Role">Role</label>
+                                <select class="form-select" id="Role" name="Role" required>
+                                    <option selected value="">Choose one role</option>
+                                    {% for rowRole in role %}
+                                    <option value="{{rowRole.0}}">{{rowRole.1}}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label>Department</label>
-                                <input type="text" name="Department" id="Department" class="form-control"  required=""/> 
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label>Salary</label>
-                                <input type="text" name="Salary" id="Salary" class="form-control"  required=""/> 
+                            
+
+                            <div class="input-group mb-3">
+                                <label class="input-group-text" for="Department">Department</label>
+                                <select class="form-select" id="Department" name="Department" required>
+                                    <option selected value="">Choose one department</option>
+                                    {% for rowDepart in depart %}
+                                    <option value="{{rowDepart.0}}">{{rowDepart.1}}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
 
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon4">Salary</span>
+                                <input type="text" name="Salary" id="Salary" class="form-control" placeholder="1500" aria-label="1500" aria-describedby="basic-addon4" required>
+                            </div>
+                            
                             <div class="form-group col-md-12">
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
@@ -199,49 +213,59 @@
         
                 <div class="modal-body">
                     <div class="form-group row" style="margin:10px;">
-                        <form action="/update" autocomplete="on" method = "POST" enctype="multipart/form-data">
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label>Name</label>
-                                <input type="text" name="getName" id="getName" class="form-control"  required=""/> 
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label>Email</label>
-                                <input type="text" name="getEmail" id="getEmail" class="form-control"  required=""/> 
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label>Phone</label>
-                                <input type="text" name="getPhone" id="getPhone" class="form-control"  required=""/> 
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label>Role</label>
-                                <input type="text" name="getRole" id="getRole" class="form-control"  required=""/> 
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label>Department</label>
-                                <input type="text" name="getDepartment" id="getDepartment" class="form-control"  required=""/> 
-                            </div>
-
-                            <div class="form-group col-md-4">
-                                <label>Salary</label>
-                                <input type="text" name="getSalary" id="getSalary" class="form-control"  required=""/> 
-                            </div>
-
-                            <div class="form-group col-md-4">
-                                <label>Status</label>
-                                <input type="text" name="getStatus" id="getStatus" class="form-control"  required=""/> 
-                            </div>
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                  <span class="input-group-text">Upload</span>
+                        <form action="/update" autocomplete="on" method="POST" enctype="multipart/form-data">
+                            <div class="form-row">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon1">Name</span>
+                                    <input type="text" name="getName" id="getName"  class="form-control" placeholder="William Wong" aria-label="William Wong" aria-describedby="basic-addon1" required>
                                 </div>
-                                <div class="custom-file">
-                                  <input type="file" name="edtimage" id="edtimage" class="custom-file-input" id="inputGroupFile01">
-                                  <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon2">Name</span>
+                                    <input type="email" name="getEmail" id="getEmail" class="form-control" placeholder="william@gmail.com" aria-label="william@gmail.com" aria-describedby="basic-addon2" required>
                                 </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon3">Phone</span>
+                                    <input type="text" name="getPhone" id="getPhone" class="form-control" placeholder="01XXXXXXXX" aria-label="01XXXXXXXX" aria-describedby="basic-addon3" required>
+                                </div>
+                                
+                                <div class="input-group mb-3">
+                                    <label class="input-group-text" for="getRole">Role</label>
+                                    <select class="form-select" id="getRole" name="getRole" required>
+                                        <option selected value="">Choose one role</option>
+                                        {% for rowRole in role %}
+                                        <option value="{{rowRole.0}}">{{rowRole.1}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                
+    
+                                <div class="input-group mb-3">
+                                    <label class="input-group-text" for="getDepartment">Department</label>
+                                    <select class="form-select" id="getDepartment" name="getDepartment" required>
+                                        <option selected value="">Choose one department</option>
+                                        {% for rowDepart in depart %}
+                                        <option value="{{rowDepart.0}}">{{rowDepart.1}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+    
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon4">Salary</span>
+                                    <input type="text" name="getSalary" id="getSalary" class="form-control" placeholder="1500" aria-label="1500" aria-describedby="basic-addon4" required>
+                                </div>
+                                
+                                <div class="form-group col-md-12">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                          <span class="input-group-text">Upload</span>
+                                        </div>
+                                        <div class="custom-file">
+                                          <input type="file" name="edtimage" id="edtimage" class="custom-file-input" id="inputGroupFile01">
+                                          <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                                        </div>
+                                      </div>
+                            <input type="text" name="getStaffID" id="getStaffID" />
                             </div>
-
-                        <input type="text" name="getStaffID" id="getStaffID" />
                         </div>
                     </div>
                 </div>
