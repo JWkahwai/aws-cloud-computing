@@ -81,9 +81,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for row in staff 
-                            image_file_name = "staff-id-" + str({row.1}) + "_image_file"
-                            %}
+                            {% for row in staff    %}
                             <tr>
                                 <td style='text-align:center;'>{{row.0}}</td>
                                 <td style='text-align:center;'>{{row.1}}</td>
