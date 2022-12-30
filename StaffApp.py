@@ -24,7 +24,7 @@ table = 'staff'
 def home():
     #Staff list
     cursor = db_conn.cursor()
-    cursor.execute("SELECT staff.StaffID,staff.Name,staff.Email,staff.Phone,role.RoleName,department.DepartmentName,staff.ImageURL FROM staff LEFT JOIN role ON staff.RoleID=role.RoleID LEFT JOIN department ON staff.DepartmentID=department.DepartmentID")
+    cursor.execute("SELECT staff.StaffID,staff.Name,staff.Email,staff.Phone,role.RoleName,department.DepartmentName,staff.Salary,staff.ImageURL FROM staff LEFT JOIN role ON staff.RoleID=role.RoleID LEFT JOIN department ON staff.DepartmentID=department.DepartmentID")
     staffdata = cursor.fetchall()
     cursor.close()
 
@@ -84,7 +84,7 @@ def AddStaff():
                 custombucket,
                 image_file_name)
 
-            insert_sql = "INSERT INTO staff(Name,Email, Phone, Role, Department, Salary, Status,ImageURL) VALUES (%s,%s, %s, %s, %s, %s, 'Active',%s)"
+            insert_sql = "INSERT INTO staff(Name,Email, Phone, RoleID, DepartmentID, Salary, Status,ImageURL) VALUES (%s,%s, %s, %s, %s, %s, 'Active',%s)"
             cursor = db_conn.cursor()
             cursor.execute(insert_sql, (name,email, phone, role, department, salary,object_url))
             db_conn.commit()
@@ -113,7 +113,7 @@ def EditStaff():
     #if no image uploaded
     if image.filename == "":
         try:
-            insert_sql = "UPDATE staff SET Name=%s, Email=%s, Phone=%s,Role=%s,Department=%s,Salary=%s,Status=%s WHERE StaffID=%s"
+            insert_sql = "UPDATE staff SET Name=%s, Email=%s, Phone=%s,RoleID=%s,DepartmentID=%s,Salary=%s,Status=%s WHERE StaffID=%s"
             cursor = db_conn.cursor()
             cursor.execute(insert_sql, (name, email, phone, role,department,salary,status,staffID))
             db_conn.commit()
@@ -132,7 +132,7 @@ def EditStaff():
             image_file_name = "staff-id-" + str(name) + "_image_file"
             s3 = boto3.resource('s3')
 
-            insert_sql = "UPDATE staff SET Name=%s, Email=%s, Phone=%s,Role=%s,Department=%s,Salary=%s,Status=%s WHERE StaffID=%s"
+            insert_sql = "UPDATE staff SET Name=%s, Email=%s, Phone=%s,RoleID=%s,DepartmentID=%s,Salary=%s,Status=%s WHERE StaffID=%s"
             cursor = db_conn.cursor()
             cursor.execute(insert_sql, (name, email, phone, role,department,salary,status,staffID))
             db_conn.commit()
