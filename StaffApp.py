@@ -115,11 +115,7 @@ def EditStaff():
     #if no image uploaded
     if image.filename == "":
         try:
-        insert_sql = """
-               UPDATE staff
-               SET Name=%s, Email=%s, Phone=%s,Role=%s,Department=%s,Salary=%s,Status=%s 
-               WHERE StaffID=%s
-            """
+        insert_sql = "UPDATE staff SET Name=%s, Email=%s, Phone=%s,Role=%s,Department=%s,Salary=%s,Status=%s WHERE StaffID=%s"
         cursor = db_conn.cursor()
         cursor.execute(insert_sql, (name, email, phone, role,department,salary,status,staffID))
         db_conn.commit()
@@ -135,11 +131,7 @@ def EditStaff():
             image_file_name = "staff-id-" + str(name) + "_image_file"
             s3 = boto3.resource('s3')
 
-            insert_sql = """
-                UPDATE staff
-                SET Name=%s, Email=%s, Phone=%s,Role=%s,Department=%s,Salary=%s,Status=%s 
-                WHERE StaffID=%s
-                """
+            insert_sql = "UPDATE staff SET Name=%s, Email=%s, Phone=%s,Role=%s,Department=%s,Salary=%s,Status=%s WHERE StaffID=%s"
             cursor = db_conn.cursor()
             cursor.execute(insert_sql, (name, email, phone, role,department,salary,status,staffID))
             db_conn.commit()
@@ -180,25 +172,6 @@ def delete():
     db_conn.commit()
     title = "Data deleted"
     return render_template('StaffOutput.html',title=title)
-
-""" #Backup
-@app.route('/update',methods=['POST','GET'])
-def update():
-    if request.method == 'POST':
-        staffID = request.form['getStaffID']
-        name = request.form['Name']
-        email = request.form['Email']
-        phone = request.form['Phone']
-        role = request.form['Role']
-        department = request.form['Department']
-        salary = request.form['Salary']
-        image = request.files['image']
-        cursor = db_conn.cursor()
-        cursor.execute(, (name, email, phone, role,department,salary,staffID))
-        flash("Data Updated Successfully")
-        db_conn.commit()
-        return redirect(url_for('home'))
-"""
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
