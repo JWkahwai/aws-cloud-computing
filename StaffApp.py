@@ -108,10 +108,10 @@ def EditStaff():
     department = request.form['getDepartment']
     salary = request.form['getSalary']
     status = request.form['getStatus']
-    image_file = request.files['edtimage']
+    edit_image = request.files['edtimage']
 
     #if no image uploaded
-    if image.filename == "":
+    if edit_image.filename == "":
         try:
             insert_sql = "UPDATE staff SET Name=%s, Email=%s, Phone=%s,RoleID=%s,DepartmentID=%s,Salary=%s,Status=%s WHERE StaffID=%s"
             cursor = db_conn.cursor()
@@ -138,7 +138,7 @@ def EditStaff():
             db_conn.commit()
             
             print("Data inserted in MySQL RDS... uploading image to S3...")
-            s3.Bucket(custombucket).put_object(Key=image_file_name, Body=image_file)
+            s3.Bucket(custombucket).put_object(Key=image_file_name, Body=edit_image)
             bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
             s3_location = (bucket_location['LocationConstraint'])
             
