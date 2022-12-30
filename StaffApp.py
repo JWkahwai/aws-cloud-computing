@@ -40,7 +40,8 @@ def home():
     cursor2.execute("SELECT * FROM role")
     roledata = cursor2.fetchall()
     cursor2.close()
-    return render_template('Staff.html',depart=departdata,role=roledata,staff=staffdata)
+    s3 = boto3.resource('s3')
+    return render_template('Staff.html',depart=departdata,role=roledata,staff=staffdata,bucket=bucket,s3=s3)
 
 
 @app.route("/about", methods=['POST'])
