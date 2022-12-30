@@ -45,7 +45,7 @@ def home():
 @app.route("/about", methods=['GET', 'POST'])
 def about():
     cursor = db_conn.cursor()
-    cursor.execute("SELECT staff.StaffID,staff.Name,staff.Email,staff.Phone,role.RoleName,department.DepartmentName,staff.Salary,staff.Status,staff.ImageURL,staff.RoleID,staff.DepartmentID FROM staff LEFT JOIN role ON staff.RoleID=role.RoleID LEFT JOIN department ON staff.DepartmentID=department.DepartmentID")
+    cursor.execute("SELECT staff.Name,staff.Email,staff.Phone,role.RoleName,department.DepartmentName,staff.ImageURL FROM staff LEFT JOIN role ON staff.RoleID=role.RoleID LEFT JOIN department ON staff.DepartmentID=department.DepartmentID")
     staffdata = cursor.fetchall()
     cursor.close()
     return render_template('AboutUs.html',staff=staffdata)
