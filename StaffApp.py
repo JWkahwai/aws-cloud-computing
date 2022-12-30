@@ -19,8 +19,6 @@ db_conn = connections.Connection(
 )
 output = {}
 table = 'staff'
-bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
-s3_location = (bucket_location['LocationConstraint'])
 
 @app.route("/", methods=['GET', 'POST'])
 def home():
@@ -41,7 +39,7 @@ def home():
     cursor.execute("SELECT * FROM role")
     roledata = cursor.fetchall()
     cursor.close()
-    return render_template('Staff.html',depart=departdata,role=roledata,staff=staffdata,custombucket=bucket,s3_location=s3_location)
+    return render_template('Staff.html',depart=departdata,role=roledata,staff=staffdata)
 
 
 @app.route("/about", methods=['POST'])
