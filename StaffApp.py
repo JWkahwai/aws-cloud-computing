@@ -61,9 +61,9 @@ def AddStaff():
         return "Please select a file"
 
     try:
-        insert_sql = "INSERT INTO staff(Name,Email, Phone, RoleID, DepartmentID, Salary, Status,ImageURL) VALUES (%s,%s, %s, %s, %s, %s, 'Active',%s)"
+        insert_sql = "INSERT INTO staff(Name,Email, Phone, RoleID, DepartmentID, Salary, Status) VALUES (%s,%s, %s, %s, %s, %s, 'Active')"
         cursor = db_conn.cursor()
-        cursor.execute(insert_sql, (name,email, phone, role, department, salary,object_url))
+        cursor.execute(insert_sql, (name,email, phone, role, department, salary))
         db_conn.commit()
         # Uplaod image file in S3 #
         image_file_name = "staff-id-" + str(cursor.lastrowid) + "_image_file"
@@ -84,6 +84,11 @@ def AddStaff():
                 s3_location,
                 custombucket,
                 image_file_name)
+            
+            UpdateImage_sql = "UPDATE staff SET ImageURL=%s WHERE StaffID=%s"
+            cursor = db_conn.cursor()
+            cursor.execute(UpdateImage_sql, (object_url,cursor.lastrowid))
+            db_conn.commit()
 
 
         except Exception as e:
