@@ -95,8 +95,8 @@ def AddStaff():
     finally:
         cursor.close()
 
-    title = "Data Added"
-    return render_template('StaffOutput.html',title=title)
+    titleData = "Data Added"
+    return render_template('StaffOutput.html',title=titleData)
 
 @app.route("/editstaff", methods=['POST'])
 def EditStaff():
@@ -153,8 +153,8 @@ def EditStaff():
         finally:
             cursor.close()
             
-    title = "Data Updated"
-    return render_template('StaffOutput.html',title=title)
+    titleData = "Data Updated"
+    return render_template('StaffOutput.html',title=titleData)
 
 
 @app.route('/delete/<string:staffID>',methods=['POST','GET'])
@@ -165,8 +165,8 @@ def delete():
     cursor = db_conn.cursor()
     cursor.execute(delete_sql, (staffID))
     db_conn.commit()
-    title = "Data deleted"
-    return render_template('StaffOutput.html',title=title)
+    titleData = "Data deleted"
+    return render_template('StaffOutput.html',title=titleData)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
