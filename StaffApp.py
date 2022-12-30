@@ -29,16 +29,16 @@ def home():
     cursor.close()
 
     #Dropdown list
-    cursor = db_conn.cursor()
-    cursor.execute("SELECT * FROM department")
-    departdata = cursor.fetchall()
-    cursor.close()
+    cursor1 = db_conn.cursor()
+    cursor1.execute("SELECT * FROM department")
+    departdata = cursor1.fetchall()
+    cursor1.close()
 
     #Dropdown list
-    cursor = db_conn.cursor()
-    cursor.execute("SELECT * FROM role")
-    roledata = cursor.fetchall()
-    cursor.close()
+    cursor2 = db_conn.cursor()
+    cursor2.execute("SELECT * FROM role")
+    roledata = cursor2.fetchall()
+    cursor2.close()
     return render_template('Staff.html',depart=departdata,role=roledata,staff=staffdata)
 
 
