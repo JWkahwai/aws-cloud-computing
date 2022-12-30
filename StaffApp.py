@@ -33,15 +33,15 @@ def home():
     #Dropdown list
     cursor = db_conn.cursor()
     cursor.execute("SELECT * FROM department")
-    depart = cursor.fetchall()
+    departdata = cursor.fetchall()
     cursor.close()
 
     #Dropdown list
     cursor = db_conn.cursor()
     cursor.execute("SELECT * FROM role")
-    depart = cursor.fetchall()
+    roledata = cursor.fetchall()
     cursor.close()
-    return render_template('Staff.html',depart=depart,staff=staffdata,custombucket=bucket,s3_location=s3_location)
+    return render_template('Staff.html',depart=departdata,role=roledata,staff=staffdata,custombucket=bucket,s3_location=s3_location)
 
 
 @app.route("/about", methods=['POST'])
