@@ -85,11 +85,11 @@
                             <tr>
                                 <td style='text-align:center;'>{{row.0}}</td>
                                 <td style='text-align:center;'>{{row.1}}</td>
-                                <td><img src='{{row.8}}' alt='No Image' style='width:100px;height:100px' data-toggle='modal' data-target='#imagemodal' id='ZoomImage'></td>
+                                <td style='text-align:center;'><img src='{{row.8}}' alt='No Image' style='width:100px;height:100px' data-toggle='modal' data-target='#imagemodal' id='ZoomImage'></td>
                                 <td style='text-align:center;'>{{row.2}}</td>
                                 <td style='text-align:center;'>{{row.3}}</td>
                                 <td style='text-align:center;'>{{row.4}}({{row.5}})</td>
-                                <td style='text-align:center;'>{{row.6}}</td>
+                                <td id='salaryNumber' style='text-align:center;'>{{row.6}}</td>
                                 <td style='text-align:center;'>{{row.7}}</td>
                                 <td style='text-align:center;'><a href="#" class="btn btn-primary btn-xs editFunction" data-id1="{{row.0}}" data-id2="{{row.1}}" 
                                     data-id3="{{row.2}}" data-id4="{{row.3}}" data-id5="{{row.9}}" data-id6="{{row.10}}" data-id7="{{row.6}}" data-id8="{{row.7}}" data-toggle="modal" data-target="#modaledit">Edit</a></td>
@@ -360,5 +360,8 @@ $(document).ready(function(){
         var Image = $(this).attr('src');
       $('#ShowImage').attr("src",Image);
     });
+    
+    var number = $('#salaryNumber').text();
+    $('#salaryNumber').text()=number.toLocaleString("en-US");
 });
 </script>
