@@ -63,11 +63,9 @@
                         </div>
                     </div>
                 </div>
-
-                {% a=0 %}                
+    
                 {% for row in staff %}
-                {%  a=a+1
-                    if(a%2)==0: %}
+                {%  if loop.count % 2 == 0 %}
                 <div class="card shadow mb-4" style="margin-top:2%">
                     <div class="card-body">
                         <div class="row featurette">
