@@ -1,6 +1,6 @@
 # CCAssignment
 
-## PRE-STEP RDS
+PRE-STEP RDS
 RDS setup follow config.py
 customuser = "aws_user"
 custompass = "Bait3273"
@@ -9,7 +9,7 @@ RDS create database -> mysql -> Free tier> database name 'staff' -> user = "aws_
 -> pass = "Bait3273" -> Public access :YES -> Security group : web-access -> AZ : 1b
 -> initial db name : staff (not that important) ->disable automated backup -> CREATE
 
-## PRE-STEP S3
+PRE-STEP S3
 custombucket = "kongkahwai-bucket" (changable config.py)
 location : us-east-1
 turn off the Block all public access
@@ -58,8 +58,7 @@ pip3 install flask
 pip3 install pymysql
 pip3 install boto3
 python3 StaffApp.py
----------------
-*till above*
+
 and click enter
 
 Back to ur EC2,  
