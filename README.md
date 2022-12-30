@@ -1,6 +1,7 @@
 # CCAssignment
 
 PRE-STEP RDS
+
 RDS setup follow config.py
 customuser = "aws_user"
 custompass = "Bait3273"
@@ -10,6 +11,7 @@ RDS create database -> mysql -> Free tier> database name 'staff' -> user = "aws_
 -> initial db name : staff (not that important) ->disable automated backup -> CREATE
 
 PRE-STEP S3
+
 custombucket = "kongkahwai-bucket" (changable config.py)
 location : us-east-1
 turn off the Block all public access
