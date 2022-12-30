@@ -157,13 +157,13 @@ def EditStaff():
     return render_template('StaffOutput.html',title=titleData)
 
 
-@app.route('/delete/<string:staffID>',methods=['POST','GET'])
-def delete():
+@app.route('/delete/<string:ID>',methods=['POST','GET'])
+def delete(ID):
     s3_client = boto3.client("s3")
     #response = s3_client.delete_object(Bucket=custombucket, Key=image_file_name)
     delete_sql = "DELETE FROM staff WHERE StaffID=%s"
     cursor = db_conn.cursor()
-    cursor.execute(delete_sql, (<string:staffID>))
+    cursor.execute(delete_sql, (ID))
     db_conn.commit()
     titleData = "Data deleted"
     return render_template('StaffOutput.html',title=titleData)
