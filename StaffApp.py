@@ -163,7 +163,7 @@ def delete():
     #response = s3_client.delete_object(Bucket=custombucket, Key=image_file_name)
     delete_sql = "DELETE FROM staff WHERE StaffID=%s"
     cursor = db_conn.cursor()
-    cursor.execute(delete_sql, (staffID))
+    cursor.execute(delete_sql, (<string:staffID>))
     db_conn.commit()
     titleData = "Data deleted"
     return render_template('StaffOutput.html',title=titleData)
