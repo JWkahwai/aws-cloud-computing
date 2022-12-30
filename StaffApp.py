@@ -64,9 +64,12 @@ def AddStaff():
         insert_sql = "INSERT INTO staff(Name,Email, Phone, RoleID, DepartmentID, Salary, Status) VALUES (%s,%s, %s, %s, %s, %s, 'Active')"
         cursor = db_conn.cursor()
         cursor.execute(insert_sql, (name,email, phone, role, department, salary))
+        getID= cursor.lastrowid
+        print("get cursor"+str(getID))
+        print("get db:"+str(db_conn.insert_id()))
         db_conn.commit()
         # Uplaod image file in S3 #
-        image_file_name = "staff-id-" + str(cursor.lastrowid) + "_image_file"
+        image_file_name = "staff-id-" + str(getID) + "_image_file"
         s3 = boto3.resource('s3')
 
         try:
