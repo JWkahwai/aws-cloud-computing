@@ -115,10 +115,10 @@ def EditStaff():
     #if no image uploaded
     if image.filename == "":
         try:
-        insert_sql = "UPDATE staff SET Name=%s, Email=%s, Phone=%s,Role=%s,Department=%s,Salary=%s,Status=%s WHERE StaffID=%s"
-        cursor = db_conn.cursor()
-        cursor.execute(insert_sql, (name, email, phone, role,department,salary,status,staffID))
-        db_conn.commit()
+            insert_sql = "UPDATE staff SET Name=%s, Email=%s, Phone=%s,Role=%s,Department=%s,Salary=%s,Status=%s WHERE StaffID=%s"
+            cursor = db_conn.cursor()
+            cursor.execute(insert_sql, (name, email, phone, role,department,salary,status,staffID))
+            db_conn.commit()
 
         except Exception as e:
                 return str(e)
