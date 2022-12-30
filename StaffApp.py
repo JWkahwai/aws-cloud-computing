@@ -90,7 +90,7 @@ def AddStaff():
             
             UpdateImage_sql = "UPDATE staff SET ImageURL=%s WHERE StaffID=%s"
             cursor = db_conn.cursor()
-            cursor.execute(UpdateImage_sql, (object_url,cursor.lastrowid))
+            cursor.execute(UpdateImage_sql, (object_url,getID))
             db_conn.commit()
 
 
