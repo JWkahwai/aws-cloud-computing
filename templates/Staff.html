@@ -152,8 +152,10 @@
                             </div>
                             
                             <div class="input-group mb-3">
-                                <label class="input-group-text" for="Role">Role</label>
-                                <select class="form-select" id="Role" name="Role" required>
+                                <div class="input-group-prepend">
+                                  <label class="input-group-text" for="Role">Role</label>
+                                </div>
+                                <select class="custom-select" id="Role" name="Role">
                                     <option selected value="">Choose one role</option>
                                     {% for rowRole in role %}
                                     <option value="{{rowRole.0}}">{{rowRole.1}}</option>
@@ -161,10 +163,11 @@
                                 </select>
                             </div>
                             
-
                             <div class="input-group mb-3">
-                                <label class="input-group-text" for="Department">Department</label>
-                                <select class="form-select" id="Department" name="Department" required>
+                                <div class="input-group-prepend">
+                                  <label class="input-group-text" for="Department">Department</label>
+                                </div>
+                                <select class="custom-select" id="Department" name="Department">
                                     <option selected value="">Choose one department</option>
                                     {% for rowDepart in depart %}
                                     <option value="{{rowDepart.0}}">{{rowDepart.1}}</option>
@@ -229,8 +232,10 @@
                                 </div>
                                 
                                 <div class="input-group mb-3">
-                                    <label class="input-group-text" for="getRole">Role</label>
-                                    <select class="form-select" id="getRole" name="getRole" required>
+                                    <div class="input-group-prepend">
+                                      <label class="input-group-text" for="getRole">Role</label>
+                                    </div>
+                                    <select class="custom-select" id="getRole" name="getRole">
                                         <option selected value="">Choose one role</option>
                                         {% for rowRole in role %}
                                         <option value="{{rowRole.0}}">{{rowRole.1}}</option>
@@ -238,10 +243,11 @@
                                     </select>
                                 </div>
                                 
-    
                                 <div class="input-group mb-3">
-                                    <label class="input-group-text" for="getDepartment">Department</label>
-                                    <select class="form-select" id="getDepartment" name="getDepartment" required>
+                                    <div class="input-group-prepend">
+                                      <label class="input-group-text" for="getDepartment">Department</label>
+                                    </div>
+                                    <select class="custom-select" id="getDepartment" name="getDepartment">
                                         <option selected value="">Choose one department</option>
                                         {% for rowDepart in depart %}
                                         <option value="{{rowDepart.0}}">{{rowDepart.1}}</option>
