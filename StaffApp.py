@@ -155,8 +155,8 @@ def EditStaff():
             except Exception as e:
                 return str(e)
 
-    finally:
-        cursor.close()
+        finally:
+            cursor.close()
 
     title = "Data Updated"
     return render_template('StaffOutput.html',title=title)
