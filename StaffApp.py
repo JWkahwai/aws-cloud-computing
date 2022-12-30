@@ -61,12 +61,13 @@ def AddStaff():
         return "Please select a file"
 
     try:
-        
+        insert_sql = "INSERT INTO staff(Name,Email, Phone, RoleID, DepartmentID, Salary, Status,ImageURL) VALUES (%s,%s, %s, %s, %s, %s, 'Active',%s)"
+        cursor = db_conn.cursor()
+        cursor.execute(insert_sql, (name,email, phone, role, department, salary,object_url))
+        db_conn.commit()
         # Uplaod image file in S3 #
-        image_file_name = "staff-id-" + str(name) + "_image_file"
+        image_file_name = "staff-id-" + str(cursor.lastrowid) + "_image_file"
         s3 = boto3.resource('s3')
-
-        
 
         try:
             print("Data inserted in MySQL RDS... uploading image to S3...")
@@ -84,10 +85,6 @@ def AddStaff():
                 custombucket,
                 image_file_name)
 
-            insert_sql = "INSERT INTO staff(Name,Email, Phone, RoleID, DepartmentID, Salary, Status,ImageURL) VALUES (%s,%s, %s, %s, %s, %s, 'Active',%s)"
-            cursor = db_conn.cursor()
-            cursor.execute(insert_sql, (name,email, phone, role, department, salary,object_url))
-            db_conn.commit()
 
         except Exception as e:
             return str(e)
@@ -160,7 +157,8 @@ def EditStaff():
 @app.route('/delete/<string:ID>',methods=['POST','GET'])
 def delete(ID):
     s3_client = boto3.client("s3")
-    #response = s3_client.delete_object(Bucket=custombucket, Key=image_file_name)
+    image_file_name = "staff-id-" + str(user.name) + "_image_file"
+    response = s3_client.delete_object(Bucket=custombucket, Key=image_file_name)
     delete_sql = "DELETE FROM staff WHERE StaffID=%s"
     cursor = db_conn.cursor()
     cursor.execute(delete_sql, (ID))
