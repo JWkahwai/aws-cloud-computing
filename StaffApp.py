@@ -15,23 +15,12 @@ db_conn = connections.Connection(
     port=3306,
     user=customuser,
     password=custompass,
-    db=customdb
+    db=customdb)
 
     
 #conect database
 def connect(self):
-        self.conn = db_conn
-
-#check connection, if fail, reconnect
-def query(self, sql):
-        try:
-            cursor = self.conn.cursor()
-            cursor.execute(sql)
-        except pymysql.OperationalError:
-            self.connect()
-            cursor = self.conn.cursor()
-            cursor.execute(sql)
-        return cursor
+    self.conn = db_conn
 
 output = {}
 table = 'staff'
