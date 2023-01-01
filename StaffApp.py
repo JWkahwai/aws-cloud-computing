@@ -27,7 +27,8 @@ try:
     cursor = db_conn.cursor()
     cursor.execute("SELECT FLOOR(5 + RAND()*(10 - 5 + 1)) AS Random_Number")
     temp = cursor.fetchall()
-    getNumber = temp[0]
+    for row in temp
+        getNumber = row[0]
     cursor.close()
     
 except pymysql.OperationalError:
@@ -35,13 +36,16 @@ except pymysql.OperationalError:
     cursor = db_conn.cursor()
     cursor.execute("SELECT FLOOR(5 + RAND()*(10 - 5 + 1)) AS Random_Number")
     temp = cursor.fetchall()
-    getNumber = temp[0]
+    for row in temp
+        getNumber = row[0]
     cursor.close()
     
+session['number']= str(getNumber)
+tempSession = session['number']
+
 @app.route("/", methods=['GET', 'POST'])
 def home():
-    session['number']= str(getNumber)
-    tempSession = session['number']
+    
     staffdata=""
     departdata=""
     roledata=""
