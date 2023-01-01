@@ -281,8 +281,8 @@ def delete(ID):
         cursor.close()
     
     response = s3_client.delete_object(Bucket=custombucket, Key=image_file_name)
-    titleData = "Data deleted"
-    return render_template('StaffOutput.html',title=titleData)
+    home()
+    return 0
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
