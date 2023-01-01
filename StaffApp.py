@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, session
 from pymysql import connections
 import os
 import boto3
-import random
 from config import *
 
 app = Flask(__name__)
@@ -26,9 +25,8 @@ cursor3 = db_conn.cursor()
 cursor3.execute("SELECT FLOOR(5 + RAND()*(10 - 5 + 1)) AS Random_Number")
 numberS = cursor3.fetchall()
 cursor3.close()
-session['number']=0
-for row3 in numberS
-    session['number']= row3.0;
+session['number']= str(numberS)
+
     
 @app.route("/", methods=['GET', 'POST'])
 def home():
