@@ -469,9 +469,6 @@ $(document).ready(function(){
         }else if(document.EditStaff.getSalary.value=="" || document.EditStaff.getSalary.value==null){
            Swal.fire("Salary cannot be blank", "Please enter Staff's Salary", "error");
              valid=false;
-         }else if(document.EditStaff.edtimage.value==""){
-           Swal.fire("Image cannot be blank", "Please choose a file or drag a photo to text field", "error");
-             valid=false;
          }
           return valid;
     }
