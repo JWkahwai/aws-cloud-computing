@@ -34,10 +34,10 @@ def home():
     session['number']= str(numberS)
     tempSession = session['number']
     #Staff list
-    cursor = db_conn.cursor()
-    cursor.execute("SELECT staff.StaffID,staff.Name,staff.Email,staff.Phone,role.RoleName,department.DepartmentName,staff.Salary,staff.Status,staff.ImageURL,staff.RoleID,staff.DepartmentID FROM staff LEFT JOIN role ON staff.RoleID=role.RoleID LEFT JOIN department ON staff.DepartmentID=department.DepartmentID")
-    staffdata = cursor.fetchall()
-    cursor.close()
+    cursorStaff = db_conn.cursor()
+    cursorStaff.execute("SELECT staff.StaffID,staff.Name,staff.Email,staff.Phone,role.RoleName,department.DepartmentName,staff.Salary,staff.Status,staff.ImageURL,staff.RoleID,staff.DepartmentID FROM staff LEFT JOIN role ON staff.RoleID=role.RoleID LEFT JOIN department ON staff.DepartmentID=department.DepartmentID")
+    staffdata = cursorStaff.fetchall()
+    cursorStaff.close()
 
     #Dropdown list
     cursor1 = db_conn.cursor()
@@ -58,10 +58,10 @@ def home():
 
 @app.route("/about", methods=['GET', 'POST'])
 def about():
-    cursor = db_conn.cursor()
-    cursor.execute("SELECT staff.Name,staff.Email,staff.Phone,role.RoleName,department.DepartmentName,staff.ImageURL FROM staff LEFT JOIN role ON staff.RoleID=role.RoleID LEFT JOIN department ON staff.DepartmentID=department.DepartmentID WHERE staff.DepartmentID=1 AND staff.Status='Active' ORDER BY RoleID ASC")
-    staffdata = cursor.fetchall()
-    cursor.close()
+    cursorAbout = db_conn.cursor()
+    cursorAbout.execute("SELECT staff.Name,staff.Email,staff.Phone,role.RoleName,department.DepartmentName,staff.ImageURL FROM staff LEFT JOIN role ON staff.RoleID=role.RoleID LEFT JOIN department ON staff.DepartmentID=department.DepartmentID WHERE staff.DepartmentID=1 AND staff.Status='Active' ORDER BY RoleID ASC")
+    staffdata = cursorAbout.fetchall()
+    cursorAbout.close()
     return render_template('AboutUs.html',staff=staffdata)
 
 
@@ -80,9 +80,9 @@ def AddStaff():
 
     try:
         insert_sql = "INSERT INTO staff(Name,Email, Phone, RoleID, DepartmentID, Salary, Status) VALUES (%s,%s, %s, %s, %s, %s, 'Active')"
-        cursor = db_conn.cursor()
-        cursor.execute(insert_sql, (name,email, phone, role, department, salary))
-        getID= cursor.lastrowid
+        cursorInsert = db_conn.cursor()
+        cursorInsert.execute(insert_sql, (name,email, phone, role, department, salary))
+        getID= cursorInsert.lastrowid
         print("get cursor"+str(getID))
         print("get db:"+str(db_conn.insert_id()))
         db_conn.commit()
@@ -107,16 +107,17 @@ def AddStaff():
                 image_file_name)
             
             UpdateImage_sql = "UPDATE staff SET ImageURL=%s WHERE StaffID=%s"
-            cursor = db_conn.cursor()
-            cursor.execute(UpdateImage_sql, (object_url,getID))
+            cursorUpdate = db_conn.cursor()
+            cursorUpdate.execute(UpdateImage_sql, (object_url,getID))
             db_conn.commit()
-
+            cursorUpdate.close()
+            
 
         except Exception as e:
             return str(e)
 
     finally:
-        cursor.close()
+        cursorInsert.close()
 
     titleData = "Data Added"
     return render_template('StaffOutput.html',title=titleData)
@@ -137,15 +138,15 @@ def EditStaff():
     if edit_image.filename == "":
         try:
             insert_sql = "UPDATE staff SET Name=%s, Email=%s, Phone=%s,RoleID=%s,DepartmentID=%s,Salary=%s,Status=%s WHERE StaffID=%s"
-            cursor = db_conn.cursor()
-            cursor.execute(insert_sql, (name, email, phone, role,department,salary,status,staffID))
+            cursorEditStaff = db_conn.cursor()
+            cursorEditStaff.execute(insert_sql, (name, email, phone, role,department,salary,status,staffID))
             db_conn.commit()
 
         except Exception as e:
             return str(e)
             
         finally:
-            cursor.close()
+            cursorEditStaff.close()
 
     #else got image upload, run image file query
     else:
@@ -156,8 +157,8 @@ def EditStaff():
             s3 = boto3.resource('s3')
 
             insert_sql = "UPDATE staff SET Name=%s, Email=%s, Phone=%s,RoleID=%s,DepartmentID=%s,Salary=%s,Status=%s WHERE StaffID=%s"
-            cursor = db_conn.cursor()
-            cursor.execute(insert_sql, (name, email, phone, role,department,salary,status,staffID))
+            cursorEditStaff1 = db_conn.cursor()
+            cursorEditStaff1.execute(insert_sql, (name, email, phone, role,department,salary,status,staffID))
             db_conn.commit()
             
             print("Data inserted in MySQL RDS... uploading image to S3...")
@@ -174,7 +175,7 @@ def EditStaff():
             return str(e)
         
         finally:
-            cursor.close()
+            cursorEditStaff1.close()
             
     titleData = "Data Updated"
     return render_template('StaffOutput.html',title=titleData)
@@ -186,9 +187,10 @@ def delete(ID):
     image_file_name = "staff-id-" + str(ID) + "_image_file"
     response = s3_client.delete_object(Bucket=custombucket, Key=image_file_name)
     delete_sql = "DELETE FROM staff WHERE StaffID=%s"
-    cursor = db_conn.cursor()
-    cursor.execute(delete_sql, (ID))
+    cursorDelete = db_conn.cursor()
+    cursorDelete.execute(delete_sql, (ID))
     db_conn.commit()
+    cursorDelete.close()
     titleData = "Data deleted"
     return render_template('StaffOutput.html',title=titleData)
 
