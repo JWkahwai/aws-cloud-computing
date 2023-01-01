@@ -108,14 +108,14 @@ def about():
     #About Us data
     try:
         cursor = db_conn.cursor()     
-        cursorAbout.execute("SELECT staff.Name,staff.Email,staff.Phone,role.RoleName,department.DepartmentName,staff.ImageURL FROM staff LEFT JOIN role ON staff.RoleID=role.RoleID LEFT JOIN department ON staff.DepartmentID=department.DepartmentID WHERE staff.DepartmentID=1 AND staff.Status='Active' ORDER BY RoleID ASC")
+        cursor.execute("SELECT staff.Name,staff.Email,staff.Phone,role.RoleName,department.DepartmentName,staff.ImageURL FROM staff LEFT JOIN role ON staff.RoleID=role.RoleID LEFT JOIN department ON staff.DepartmentID=department.DepartmentID WHERE staff.DepartmentID=1 AND staff.Status='Active' ORDER BY RoleID ASC")
         staffdata = cursorAbout.fetchall()
         cursor.close()
     
     except pymysql.OperationalError:
         db_conn.ping()
         cursor = db_conn.cursor()       
-        cursorAbout.execute("SELECT staff.Name,staff.Email,staff.Phone,role.RoleName,department.DepartmentName,staff.ImageURL FROM staff LEFT JOIN role ON staff.RoleID=role.RoleID LEFT JOIN department ON staff.DepartmentID=department.DepartmentID WHERE staff.DepartmentID=1 AND staff.Status='Active' ORDER BY RoleID ASC")
+        cursor.execute("SELECT staff.Name,staff.Email,staff.Phone,role.RoleName,department.DepartmentName,staff.ImageURL FROM staff LEFT JOIN role ON staff.RoleID=role.RoleID LEFT JOIN department ON staff.DepartmentID=department.DepartmentID WHERE staff.DepartmentID=1 AND staff.Status='Active' ORDER BY RoleID ASC")
         staffdata = cursorAbout.fetchall()
         cursor.close()
     
@@ -140,7 +140,6 @@ def AddStaff():
         try:
             cursor = db_conn.cursor()
             insert_sql = "INSERT INTO staff(Name,Email, Phone, RoleID, DepartmentID, Salary, Status) VALUES (%s,%s, %s, %s, %s, %s, 'Active')"
-            cursor = db_conn.cursor()
             cursor.execute(insert_sql, (name,email, phone, role, department, salary))
             getID= cursor.lastrowid
             cursor.commit()
@@ -150,7 +149,6 @@ def AddStaff():
             db_conn.ping()
             cursor = db_conn.cursor() 
             insert_sql = "INSERT INTO staff(Name,Email, Phone, RoleID, DepartmentID, Salary, Status) VALUES (%s,%s, %s, %s, %s, %s, 'Active')"
-            cursor = db_conn.cursor()
             cursor.execute(insert_sql, (name,email, phone, role, department, salary))
             getID= cursor.lastrowid
             cursor.commit()
@@ -240,7 +238,7 @@ def EditStaff():
             try:
                 cursor = db_conn.cursor()
                 insert_sql = "UPDATE staff SET Name=%s, Email=%s, Phone=%s,RoleID=%s,DepartmentID=%s,Salary=%s,Status=%s WHERE StaffID=%s"
-                cursorEditStaff1.execute(insert_sql, (name, email, phone, role,department,salary,status,staffID))
+                cursor.execute(insert_sql, (name, email, phone, role,department,salary,status,staffID))
                 cursor.commit()
                 cursor.close()
 
@@ -248,20 +246,13 @@ def EditStaff():
                 db_conn.ping()
                 cursor = db_conn.cursor()            
                 insert_sql = "UPDATE staff SET Name=%s, Email=%s, Phone=%s,RoleID=%s,DepartmentID=%s,Salary=%s,Status=%s WHERE StaffID=%s"
-                cursorEditStaff1.execute(insert_sql, (name, email, phone, role,department,salary,status,staffID))
+                cursor.execute(insert_sql, (name, email, phone, role,department,salary,status,staffID))
                 cursor.commit()
                 cursor.close()
             
             print("Data inserted in MySQL RDS... uploading image to S3...")
             s3.Bucket(custombucket).put_object(Key=image_file_name, Body=edit_image)
-            bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
-            s3_location = (bucket_location['LocationConstraint'])
             
-            if s3_location is None:
-                s3_location = ''
-            else:
-                s3_location = '-' + s3_location
-                object_url = "https://s3{0}.amazonaws.com/{1}/{2}".format(s3_location,custombucket,image_file_name)
         except Exception as e:
             return str(e)
 
