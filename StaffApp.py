@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, session
 from pymysql import connections
 import os
 import boto3
+import random
 from config import *
 
 app = Flask(__name__)
