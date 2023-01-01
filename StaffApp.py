@@ -59,7 +59,6 @@ except pymysql.OperationalError:
 def home():
     session['number']= str(getNumber)
     tempSession = session['number']
-    staffdata
     staffdata=""
     departdata=""
     roledata=""
@@ -105,8 +104,15 @@ def home():
         cursor.execute("SELECT * FROM role")
         roledata = cursor.fetchall()
         cursor.close()
-    
-    return render_template('Staff.html',depart=departdata,role=roledata,staff=staffdata,sessionNumber=tempSession)
+
+    bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
+    s3_location = (bucket_location['LocationConstraint'])
+    if s3_location is None:
+        s3_location = ''
+    else:
+        s3_location = '-' + s3_location
+        
+    return render_template('Staff.html',depart=departdata,role=roledata,staff=staffdata,sessionNumber=tempSession,staffBucket=custombucket,locationS3=s3_location)
 
 
 @app.route("/about", methods=['GET', 'POST'])
