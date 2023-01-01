@@ -25,11 +25,13 @@ cursor3 = db_conn.cursor()
 cursor3.execute("SELECT FLOOR(5 + RAND()*(10 - 5 + 1)) AS Random_Number")
 numberS = cursor3.fetchall()
 cursor3.close()
-session['number']= str(numberS)
+
 
     
 @app.route("/", methods=['GET', 'POST'])
 def home():
+    session['number']= str(numberS)
+    tempSession = session['number']
     #Staff list
     cursor = db_conn.cursor()
     cursor.execute("SELECT staff.StaffID,staff.Name,staff.Email,staff.Phone,role.RoleName,department.DepartmentName,staff.Salary,staff.Status,staff.ImageURL,staff.RoleID,staff.DepartmentID FROM staff LEFT JOIN role ON staff.RoleID=role.RoleID LEFT JOIN department ON staff.DepartmentID=department.DepartmentID")
@@ -50,7 +52,7 @@ def home():
     
 
     
-    return render_template('Staff.html',depart=departdata,role=roledata,staff=staffdata,sessionNumber=session['number'])
+    return render_template('Staff.html',depart=departdata,role=roledata,staff=staffdata,sessionNumber=tempSession)
 
 
 @app.route("/about", methods=['GET', 'POST'])
