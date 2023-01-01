@@ -34,25 +34,14 @@ def home():
     session['number']= str(numberS)
     tempSession = session['number']
     #Staff list
-    cursorStaff = db_conn.cursor()
-    cursorStaff.execute("SELECT staff.StaffID,staff.Name,staff.Email,staff.Phone,role.RoleName,department.DepartmentName,staff.Salary,staff.Status,staff.ImageURL,staff.RoleID,staff.DepartmentID FROM staff LEFT JOIN role ON staff.RoleID=role.RoleID LEFT JOIN department ON staff.DepartmentID=department.DepartmentID")
-    staffdata = cursorStaff.fetchall()
-    cursorStaff.close()
-
-    #Dropdown list
-    cursor1 = db_conn.cursor()
-    cursor1.execute("SELECT * FROM department")
-    departdata = cursor1.fetchall()
-    cursor1.close()
-
-    #Dropdown list
-    cursor2 = db_conn.cursor()
-    cursor2.execute("SELECT * FROM role")
+    cursor = db_conn.cursor()
+    cursor.execute("SELECT staff.StaffID,staff.Name,staff.Email,staff.Phone,role.RoleName,department.DepartmentName,staff.Salary,staff.Status,staff.ImageURL,staff.RoleID,staff.DepartmentID FROM staff LEFT JOIN role ON staff.RoleID=role.RoleID LEFT JOIN department ON staff.DepartmentID=department.DepartmentID")
+    staffdata = cursor.fetchall()
+    cursor.execute("SELECT * FROM role")
+    roledata = cursor.fetchall()
+    cursor.execute("SELECT * FROM role")
     roledata = cursor2.fetchall()
-    cursor2.close()
-    
-
-    
+    cursor.close()
     return render_template('Staff.html',depart=departdata,role=roledata,staff=staffdata,sessionNumber=tempSession)
 
 
