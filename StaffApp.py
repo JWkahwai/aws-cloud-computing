@@ -27,8 +27,7 @@ try:
     cursor = db_conn.cursor()
     cursor.execute("SELECT FLOOR(5 + RAND()*(10 - 5 + 1)) AS Random_Number")
     temp = cursor.fetchall()
-    for row in temp:
-        getNumber = row["Random_Number"]
+    getNumber = row[0]
     cursor.close()
     
 except pymysql.OperationalError:
@@ -36,8 +35,7 @@ except pymysql.OperationalError:
     cursor = db_conn.cursor()
     cursor.execute("SELECT FLOOR(5 + RAND()*(10 - 5 + 1)) AS Random_Number")
     temp = cursor.fetchall()
-    for row in temp:
-        getNumber = row["Random_Number"]
+    getNumber = row[0]
     cursor.close()
     
 @app.route("/", methods=['GET', 'POST'])
