@@ -118,8 +118,15 @@ def about():
         cursor.execute("SELECT staff.Name,staff.Email,staff.Phone,role.RoleName,department.DepartmentName,staff.ImageURL FROM staff LEFT JOIN role ON staff.RoleID=role.RoleID LEFT JOIN department ON staff.DepartmentID=department.DepartmentID WHERE staff.DepartmentID=1 AND staff.Status='Active' ORDER BY staff.RoleID ASC")
         staffdata = cursor.fetchall()
         cursor.close()
-    
-    return render_template('AboutUs.html',staff=staffdata)
+        
+    bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
+    s3_location = (bucket_location['LocationConstraint'])
+    if s3_location is None:
+        s3_location = ''
+    else:
+        s3_location = '-' + s3_location
+        
+    return render_template('AboutUs.html',staff=staffdata,staffBucket=custombucket,locationS3=s3_location)
 
 @app.route("/addstaff", methods=['POST'])
 def AddStaff():
