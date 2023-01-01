@@ -408,15 +408,14 @@ $(document).ready(function(){
     });
     
     $(document).on('keyup','#Salary',function()){
-        var val = $(this).text()
+        var val = $(this).text();
         val = val.replace(/[^0-9\.]/g,'');
         if(val != "") {
             valArr = val.split('.');
             valArr[0] = (parseInt(valArr[0],10)).toLocaleString();
             val = valArr.join('.');
         }
-        $(this).text() = val
-    }
+        $(this).text() = val;
     });
 });
     
