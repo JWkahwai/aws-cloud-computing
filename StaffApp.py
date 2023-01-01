@@ -282,7 +282,7 @@ def delete(ID):
     
     response = s3_client.delete_object(Bucket=custombucket, Key=image_file_name)
     home()
-    return 0
+    return "redirect by home()"
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
