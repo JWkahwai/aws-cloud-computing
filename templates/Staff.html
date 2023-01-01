@@ -364,9 +364,7 @@ $(document).ready(function(){
       $('#ShowImage').attr("src",Image);
     });
     
-});
-    
-var myinput = document.getElementById('getSalary');
+    var myinput = document.getElementById('getSalary');
 myinput.addEventListener('getSalary', function() {
   var val = this.value;
   val = val.replace(/[^0-9\.]/g,'');
@@ -393,6 +391,10 @@ myinput.addEventListener('getSalary', function() {
   
   this.value = val;
 });
+    
+});
+    
+
     
     function validateAddStaff(){
         valid=true;
