@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, session
 from pymysql import connections
+import pymysql
 import os
 import boto3
 from config import *
