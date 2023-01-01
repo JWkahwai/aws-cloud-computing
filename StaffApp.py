@@ -25,7 +25,7 @@ table = 'staff'
 getNumber = 0;
 try:
     cursor = db_conn.cursor()
-    cursor.execute("SELECT FLOOR(5 + RAND()*(10 - 5 + 1)) AS Random_Number")
+    cursor.execute("SELECT FLOOR(RAND()*(10-1+1))+10")
     temp = cursor.fetchall()
     for row in temp:
         getNumber = row[0]
@@ -34,7 +34,7 @@ try:
 except pymysql.OperationalError:
     db_conn.ping()
     cursor = db_conn.cursor()
-    cursor.execute("SELECT FLOOR(5 + RAND()*(10 - 5 + 1)) AS Random_Number")
+    cursor.execute("SELECT FLOOR(RAND()*(10-1+1))+1")
     temp = cursor.fetchall()
     for row in temp:
         getNumber = row[0]
