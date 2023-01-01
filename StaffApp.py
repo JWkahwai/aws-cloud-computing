@@ -20,7 +20,7 @@ db_conn = connections.Connection(
 output = {}
 table = 'staff'
 session['testing'] = random.randint(1, 1000)
-sessionNumber = session['testing']
+
 
 @app.route("/", methods=['GET', 'POST'])
 def home():
@@ -41,7 +41,7 @@ def home():
     cursor2.execute("SELECT * FROM role")
     roledata = cursor2.fetchall()
     cursor2.close()
-    return render_template('Staff.html',depart=departdata,role=roledata,staff=staffdata,sessionNumber)
+    return render_template('Staff.html',depart=departdata,role=roledata,staff=staffdata,sessionNumber=session['testing'])
 
 
 @app.route("/about", methods=['GET', 'POST'])
