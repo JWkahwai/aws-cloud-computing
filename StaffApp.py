@@ -23,6 +23,7 @@ table = 'staff'
     
 #testing for session
 getNumber = 0;
+db_conn.commit()
 try:
     cursor = db_conn.cursor()
     cursor.execute("SELECT FLOOR(RAND()*(10-1+1))+10")
