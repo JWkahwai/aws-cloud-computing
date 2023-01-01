@@ -20,9 +20,6 @@ db_conn = connections.Connection(
 )
 output = {}
 table = 'staff'
-session['testing'] = random.randint(1, 1000)
-numberS=session['testing']
-
 
 @app.route("/", methods=['GET', 'POST'])
 def home():
@@ -43,6 +40,13 @@ def home():
     cursor2.execute("SELECT * FROM role")
     roledata = cursor2.fetchall()
     cursor2.close()
+    
+    #test random
+    cursor3 = db_conn.cursor()
+    cursor3.execute("SELECT FLOOR(5 + RAND()*(10 - 5 + 1)) AS Random_Number")
+    numberS = cursor3.fetchall()
+    cursor3.close()
+    
     return render_template('Staff.html',depart=departdata,role=roledata,staff=staffdata,sessionNumber=numberS)
 
 
