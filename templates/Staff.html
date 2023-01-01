@@ -96,7 +96,7 @@
                                 <td style='text-align:center;'>{{row.7}}</td>
                                 <td style='text-align:center;'><a href="#" class="btn btn-primary btn-xs editFunction" data-id1="{{row.0}}" data-id2="{{row.1}}" 
                                     data-id3="{{row.2}}" data-id4="{{row.3}}" data-id5="{{row.9}}" data-id6="{{row.10}}" data-id7="{{row.6}}" data-id8="{{row.7}}" data-toggle="modal" data-target="#modaledit">Edit</a></td>
-                                <td style='text-align:center;'><a href="/delete/{{row.0}}" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure For Delete?')">Delete</a></td>
+                                <td style='text-align:center;'><button class="btn btn-danger btn-xs deleteFunction" data-id1="{{row.0}}" data-id2="{{row.1}}">Delete</button></td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -356,9 +356,52 @@ $(document).ready(function(){
             $('#getSalary').val(getSalary);
             $('#getStatus').val(getStatus);
             $('#getStaffID').val(getStaffID);
-      });  
-
-      
+      });
+    
+    $(document).on('click', '.editFunction', function(){  
+            var getStaffID = $(this).data("id1");
+            var getName = $(this).data("id2");
+            Swal.fire({
+              title: 'Are you sure for deleting '+getName+'?',
+              text: "You won't be able to revert this!",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                  let timerInterval
+                    Swal.fire({
+                    title: 'Record deleted',
+                    icon: 'success',
+                    html: 'The staff :'getName+' has been deleted.', //text
+                    timer: 5000,// 1000 = 1second
+                    timerProgressBar: true,//timerProgressBar
+                    confirmButtonText:'Ok',//ConfirmButton show with text 'Ok'
+                    onBeforeOpen: () => {
+                    //	Swal.showLoading()
+                        timerInterval = setInterval(() => {
+                        const content = Swal.getContent()
+                        if (content) {
+                            const b = content.querySelector('b')
+                            if (b) {
+                                b.textContent = Math.ceil(swal.getTimerLeft() / 1000) //to get second for text
+                            }
+                        }
+                        }, 1000)
+                    },
+                    onClose: () => {
+                        clearInterval(timerInterval)
+                    }
+                    }).then((result) => {
+                        //timer
+                        window.location.href="/delete/"+getStaffID;
+                    })
+              }
+            })
+      });
+    
     $(document).on('click', '#ZoomImage', function(){
         var Image = $(this).attr('src');
       $('#ShowImage').attr("src",Image);
@@ -449,4 +492,6 @@ myinput.addEventListener('getSalary', function() {
          }
           return valid;
     }
+    
+    
 </script>
