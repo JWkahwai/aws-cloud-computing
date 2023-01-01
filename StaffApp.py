@@ -133,14 +133,28 @@ def AddStaff():
 
     if image_file.filename == "":
         return "Please select a file"
+
     try:
-        insert_sql = "INSERT INTO staff(Name,Email, Phone, RoleID, DepartmentID, Salary, Status) VALUES (%s,%s, %s, %s, %s, %s, 'Active')"
-        cursorInsert = db_conn.cursor()
-        cursorInsert.execute(insert_sql, (name,email, phone, role, department, salary))
-        getID= cursorInsert.lastrowid
-        print("get cursor"+str(getID))
-        print("get db:"+str(db_conn.insert_id()))
-        db_conn.commit()
+        getID=0
+
+        try:
+            cursor = db_conn.cursor()
+            insert_sql = "INSERT INTO staff(Name,Email, Phone, RoleID, DepartmentID, Salary, Status) VALUES (%s,%s, %s, %s, %s, %s, 'Active')"
+            cursor.execute(insert_sql, (name,email, phone, role, department, salary))
+            getID= cursor.lastrowid
+            db_conn.commit()
+            cursor.close()
+            
+
+        except pymysql.OperationalError:
+            db_conn.ping()
+            cursor = db_conn.cursor() 
+            insert_sql = "INSERT INTO staff(Name,Email, Phone, RoleID, DepartmentID, Salary, Status) VALUES (%s,%s, %s, %s, %s, %s, 'Active')"
+            cursor.execute(insert_sql, (name,email, phone, role, department, salary))
+            getID= cursor.lastrowid
+            db_conn.commit()
+            cursor.close()
+        
         # Uplaod image file in S3 #
         image_file_name = "staff-id-" + str(getID) + "_image_file"
         s3 = boto3.resource('s3')
@@ -161,21 +175,28 @@ def AddStaff():
                 custombucket,
                 image_file_name)
             
-            UpdateImage_sql = "UPDATE staff SET ImageURL=%s WHERE StaffID=%s"
-            cursorUpdate = db_conn.cursor()
-            cursorUpdate.execute(UpdateImage_sql, (object_url,getID))
-            db_conn.commit()
-            cursorUpdate.close()
-            
+            try:
+                cursor = db_conn.cursor() 
+                UpdateImage_sql = "UPDATE staff SET ImageURL=%s WHERE StaffID=%s"
+                cursor.execute(UpdateImage_sql, (object_url,getID))
+                db_conn.commit()
+                cursor.close()
+
+            except pymysql.OperationalError:
+                db_conn.ping()
+                cursor = db_conn.cursor() 
+                UpdateImage_sql = "UPDATE staff SET ImageURL=%s WHERE StaffID=%s"
+                cursor.execute(UpdateImage_sql, (object_url,getID))
+                db_conn.commit()
+                cursor.close()
 
         except Exception as e:
             return str(e)
 
     finally:
-        cursorInsert.close()
-
-    titleData = "Data Added"
-    return render_template('StaffOutput.html',title=titleData)
+        cursor.close()
+        titleData = "Data Added"
+        return render_template('StaffOutput.html',title=titleData)
 
 @app.route("/update", methods=['POST'])
 def EditStaff():
@@ -196,7 +217,7 @@ def EditStaff():
                 cursor = db_conn.cursor()
                 insert_sql = "UPDATE staff SET Name=%s, Email=%s, Phone=%s,RoleID=%s,DepartmentID=%s,Salary=%s,Status=%s WHERE StaffID=%s"
                 cursor.execute(insert_sql, (name, email, phone, role,department,salary,status,staffID))
-                cursor.commit()
+                db_conn.commit()
                 cursor.close()
 
             except pymysql.OperationalError:
@@ -204,7 +225,7 @@ def EditStaff():
                 cursor = db_conn.cursor()          
                 insert_sql = "UPDATE staff SET Name=%s, Email=%s, Phone=%s,RoleID=%s,DepartmentID=%s,Salary=%s,Status=%s WHERE StaffID=%s"
                 cursor.execute(insert_sql, (name, email, phone, role,department,salary,status,staffID))
-                cursor.commit()
+                db_conn.commit()
                 cursor.close()
     
         except Exception as e:
