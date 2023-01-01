@@ -17,42 +17,116 @@ db_conn = connections.Connection(
     password=custompass,
     db=customdb
 
-)
+    
+#conect database
+def connect(self):
+        self.conn = db_conn
+
+#check connection, if fail, reconnect
+def query(self, sql):
+        try:
+            cursor = self.conn.cursor()
+            cursor.execute(sql)
+        except pymysql.OperationalError:
+            self.connect()
+            cursor = self.conn.cursor()
+            cursor.execute(sql)
+        return cursor
+
 output = {}
 table = 'staff'
-
-#test random number
-cursor3 = db_conn.cursor()
-cursor3.execute("SELECT FLOOR(5 + RAND()*(10 - 5 + 1)) AS Random_Number")
-numberS = cursor3.fetchall()
-cursor3.close()
-
-
+    
+#testing for session
+getNumber = 0;
+try:
+    cursor = self.conn.cursor()
+    cursor.execute("SELECT FLOOR(5 + RAND()*(10 - 5 + 1)) AS Random_Number")
+    temp = cursor.fetchall()
+    for row in temp:
+        getNumber = row["Random_Number"]
+    cursor.close()
+    
+except pymysql.OperationalError:
+    self.connect()
+    cursor = self.conn.cursor()
+    cursor.execute("SELECT FLOOR(5 + RAND()*(10 - 5 + 1)) AS Random_Number")
+    temp = cursor.fetchall()
+    for row in temp:
+        getNumber = row["Random_Number"]
+    cursor.close()
     
 @app.route("/", methods=['GET', 'POST'])
 def home():
-    session['number']= str(numberS)
+    session['number']= str(getNumber)
     tempSession = session['number']
-    #Staff list
-    cursor = db_conn.cursor()
-    cursor.execute("SELECT staff.StaffID,staff.Name,staff.Email,staff.Phone,role.RoleName,department.DepartmentName,staff.Salary,staff.Status,staff.ImageURL,staff.RoleID,staff.DepartmentID FROM staff LEFT JOIN role ON staff.RoleID=role.RoleID LEFT JOIN department ON staff.DepartmentID=department.DepartmentID")
-    staffdata = cursor.fetchall()
-    cursor.execute("SELECT * FROM department")
-    departdata = cursor.fetchall()
-    cursor.execute("SELECT * FROM role")
-    roledata = cursor.fetchall()
-    cursor.close()
+    staffdata
+    staffdata=""
+    departdata=""
+    roledata=""
+    
+    #Staff data
+    try:
+        cursor = self.conn.cursor()
+        cursor.execute("SELECT staff.StaffID,staff.Name,staff.Email,staff.Phone,role.RoleName,department.DepartmentName,staff.Salary,staff.Status,staff.ImageURL,staff.RoleID,staff.DepartmentID FROM staff LEFT JOIN role ON staff.RoleID=role.RoleID LEFT JOIN department ON staff.DepartmentID=department.DepartmentID")
+        staffdata = cursor.fetchall()
+        cursor.close()
+    
+    except pymysql.OperationalError:
+        self.connect()
+        cursor = self.conn.cursor()
+        cursor.execute("SELECT staff.StaffID,staff.Name,staff.Email,staff.Phone,role.RoleName,department.DepartmentName,staff.Salary,staff.Status,staff.ImageURL,staff.RoleID,staff.DepartmentID FROM staff LEFT JOIN role ON staff.RoleID=role.RoleID LEFT JOIN department ON staff.DepartmentID=department.DepartmentID")
+        staffdata = cursor.fetchall()
+        cursor.close()
+        
+    #Department data(Dropdown list)
+    try:
+        cursor = self.conn.cursor()
+        cursor.execute("SELECT * FROM department")
+        departdata = cursor.fetchall()
+        cursor.close()
+    
+    except pymysql.OperationalError:
+        self.connect()
+        cursor = self.conn.cursor()
+        cursor.execute("SELECT * FROM department")
+        departdata = cursor.fetchall()
+        cursor.close()
+    
+    #role data(Dropdown list)
+    try:
+        cursor = self.conn.cursor()        
+        cursor.execute("SELECT * FROM role")
+        roledata = cursor.fetchall()
+        cursor.close()
+    
+    except pymysql.OperationalError:
+        self.connect()
+        cursor = self.conn.cursor()        
+        cursor.execute("SELECT * FROM role")
+        roledata = cursor.fetchall()
+        cursor.close()
+    
     return render_template('Staff.html',depart=departdata,role=roledata,staff=staffdata,sessionNumber=tempSession)
 
 
 @app.route("/about", methods=['GET', 'POST'])
 def about():
-    cursorAbout = db_conn.cursor()
-    cursorAbout.execute("SELECT staff.Name,staff.Email,staff.Phone,role.RoleName,department.DepartmentName,staff.ImageURL FROM staff LEFT JOIN role ON staff.RoleID=role.RoleID LEFT JOIN department ON staff.DepartmentID=department.DepartmentID WHERE staff.DepartmentID=1 AND staff.Status='Active' ORDER BY RoleID ASC")
-    staffdata = cursorAbout.fetchall()
-    cursorAbout.close()
+    staffdata=""
+    #About Us data
+    try:
+        cursor = self.conn.cursor()        
+        cursorAbout.execute("SELECT staff.Name,staff.Email,staff.Phone,role.RoleName,department.DepartmentName,staff.ImageURL FROM staff LEFT JOIN role ON staff.RoleID=role.RoleID LEFT JOIN department ON staff.DepartmentID=department.DepartmentID WHERE staff.DepartmentID=1 AND staff.Status='Active' ORDER BY RoleID ASC")
+        staffdata = cursorAbout.fetchall()
+        cursor.close()
+    
+    except pymysql.OperationalError:
+        self.connect()
+        cursor = self.conn.cursor()        
+        cursorAbout.execute("SELECT staff.Name,staff.Email,staff.Phone,role.RoleName,department.DepartmentName,staff.ImageURL FROM staff LEFT JOIN role ON staff.RoleID=role.RoleID LEFT JOIN department ON staff.DepartmentID=department.DepartmentID WHERE staff.DepartmentID=1 AND staff.Status='Active' ORDER BY RoleID ASC")
+        staffdata = cursorAbout.fetchall()
+        cursor.close()
+    
     return render_template('AboutUs.html',staff=staffdata)
-
 
 @app.route("/addstaff", methods=['POST'])
 def AddStaff():
@@ -68,13 +142,27 @@ def AddStaff():
         return "Please select a file"
 
     try:
-        insert_sql = "INSERT INTO staff(Name,Email, Phone, RoleID, DepartmentID, Salary, Status) VALUES (%s,%s, %s, %s, %s, %s, 'Active')"
-        cursorInsert = db_conn.cursor()
-        cursorInsert.execute(insert_sql, (name,email, phone, role, department, salary))
-        getID= cursorInsert.lastrowid
-        print("get cursor"+str(getID))
-        print("get db:"+str(db_conn.insert_id()))
-        db_conn.commit()
+        getID=0
+        #About Us data
+        try:
+            cursor = self.conn.cursor()
+            insert_sql = "INSERT INTO staff(Name,Email, Phone, RoleID, DepartmentID, Salary, Status) VALUES (%s,%s, %s, %s, %s, %s, 'Active')"
+            cursor = db_conn.cursor()
+            cursor.execute(insert_sql, (name,email, phone, role, department, salary))
+            getID= cursor.lastrowid
+            cursor.commit()
+            cursor.close()
+
+        except pymysql.OperationalError:
+            self.connect()
+            cursor = self.conn.cursor()
+            insert_sql = "INSERT INTO staff(Name,Email, Phone, RoleID, DepartmentID, Salary, Status) VALUES (%s,%s, %s, %s, %s, %s, 'Active')"
+            cursor = db_conn.cursor()
+            cursor.execute(insert_sql, (name,email, phone, role, department, salary))
+            getID= cursor.lastrowid
+            cursor.commit()
+            cursor.close()
+        
         # Uplaod image file in S3 #
         image_file_name = "staff-id-" + str(getID) + "_image_file"
         s3 = boto3.resource('s3')
@@ -95,21 +183,27 @@ def AddStaff():
                 custombucket,
                 image_file_name)
             
-            UpdateImage_sql = "UPDATE staff SET ImageURL=%s WHERE StaffID=%s"
-            cursorUpdate = db_conn.cursor()
-            cursorUpdate.execute(UpdateImage_sql, (object_url,getID))
-            db_conn.commit()
-            cursorUpdate.close()
-            
+            try:
+                cursor = self.conn.cursor()
+                UpdateImage_sql = "UPDATE staff SET ImageURL=%s WHERE StaffID=%s"
+                cursor.execute(UpdateImage_sql, (object_url,getID))
+                cursor.commit()
+                cursor.close()
+
+            except pymysql.OperationalError:
+                self.connect()
+                cursor = self.conn.cursor()
+                UpdateImage_sql = "UPDATE staff SET ImageURL=%s WHERE StaffID=%s"
+                cursor.execute(UpdateImage_sql, (object_url,getID))
+                cursor.commit()
+                cursor.close()
 
         except Exception as e:
             return str(e)
 
     finally:
-        cursorInsert.close()
-
-    titleData = "Data Added"
-    return render_template('StaffOutput.html',title=titleData)
+        titleData = "Data Added"
+        return render_template('StaffOutput.html',title=titleData)
 
 @app.route("/update", methods=['POST'])
 def EditStaff():
@@ -126,29 +220,44 @@ def EditStaff():
     #if no image uploaded
     if edit_image.filename == "":
         try:
-            insert_sql = "UPDATE staff SET Name=%s, Email=%s, Phone=%s,RoleID=%s,DepartmentID=%s,Salary=%s,Status=%s WHERE StaffID=%s"
-            cursorEditStaff = db_conn.cursor()
-            cursorEditStaff.execute(insert_sql, (name, email, phone, role,department,salary,status,staffID))
-            db_conn.commit()
+            try:
+                cursor = self.conn.cursor()
+                insert_sql = "UPDATE staff SET Name=%s, Email=%s, Phone=%s,RoleID=%s,DepartmentID=%s,Salary=%s,Status=%s WHERE StaffID=%s"
+                cursor.execute(insert_sql, (name, email, phone, role,department,salary,status,staffID))
+                cursor.commit()
+                cursor.close()
 
+            except pymysql.OperationalError:
+                self.connect()
+                cursor = self.conn.cursor()            
+                insert_sql = "UPDATE staff SET Name=%s, Email=%s, Phone=%s,RoleID=%s,DepartmentID=%s,Salary=%s,Status=%s WHERE StaffID=%s"
+                cursor.execute(insert_sql, (name, email, phone, role,department,salary,status,staffID))
+                cursor.commit()
+                cursor.close()
+    
         except Exception as e:
             return str(e)
-            
-        finally:
-            cursorEditStaff.close()
 
     #else got image upload, run image file query
     else:
         try:
-            
             # Upload image file in S3 #
             image_file_name = "staff-id-" + str(staffID) + "_image_file"
             s3 = boto3.resource('s3')
+            try:
+                cursor = self.conn.cursor()
+                insert_sql = "UPDATE staff SET Name=%s, Email=%s, Phone=%s,RoleID=%s,DepartmentID=%s,Salary=%s,Status=%s WHERE StaffID=%s"
+                cursorEditStaff1.execute(insert_sql, (name, email, phone, role,department,salary,status,staffID))
+                cursor.commit()
+                cursor.close()
 
-            insert_sql = "UPDATE staff SET Name=%s, Email=%s, Phone=%s,RoleID=%s,DepartmentID=%s,Salary=%s,Status=%s WHERE StaffID=%s"
-            cursorEditStaff1 = db_conn.cursor()
-            cursorEditStaff1.execute(insert_sql, (name, email, phone, role,department,salary,status,staffID))
-            db_conn.commit()
+            except pymysql.OperationalError:
+                self.connect()
+                cursor = self.conn.cursor()            
+                insert_sql = "UPDATE staff SET Name=%s, Email=%s, Phone=%s,RoleID=%s,DepartmentID=%s,Salary=%s,Status=%s WHERE StaffID=%s"
+                cursorEditStaff1.execute(insert_sql, (name, email, phone, role,department,salary,status,staffID))
+                cursor.commit()
+                cursor.close()
             
             print("Data inserted in MySQL RDS... uploading image to S3...")
             s3.Bucket(custombucket).put_object(Key=image_file_name, Body=edit_image)
@@ -162,10 +271,7 @@ def EditStaff():
                 object_url = "https://s3{0}.amazonaws.com/{1}/{2}".format(s3_location,custombucket,image_file_name)
         except Exception as e:
             return str(e)
-        
-        finally:
-            cursorEditStaff1.close()
-            
+
     titleData = "Data Updated"
     return render_template('StaffOutput.html',title=titleData)
 
@@ -174,12 +280,21 @@ def EditStaff():
 def delete(ID):
     s3_client = boto3.client("s3")
     image_file_name = "staff-id-" + str(ID) + "_image_file"
+    try:
+        cursor = self.conn.cursor()
+        delete_sql = "DELETE FROM staff WHERE StaffID=%s"
+        cursor.execute(delete_sql, (ID))
+        cursor.commit()
+        cursor.close()
+    except pymysql.OperationalError:
+        self.connect()        
+        cursor = self.conn.cursor()
+        delete_sql = "DELETE FROM staff WHERE StaffID=%s"
+        cursor.execute(delete_sql, (ID))
+        cursor.commit()
+        cursor.close()
+    
     response = s3_client.delete_object(Bucket=custombucket, Key=image_file_name)
-    delete_sql = "DELETE FROM staff WHERE StaffID=%s"
-    cursorDelete = db_conn.cursor()
-    cursorDelete.execute(delete_sql, (ID))
-    db_conn.commit()
-    cursorDelete.close()
     titleData = "Data deleted"
     return render_template('StaffOutput.html',title=titleData)
 
