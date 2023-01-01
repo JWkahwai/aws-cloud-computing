@@ -241,7 +241,7 @@ def EditStaff():
                 cursor = db_conn.cursor()
                 insert_sql = "UPDATE staff SET Name=%s, Email=%s, Phone=%s,RoleID=%s,DepartmentID=%s,Salary=%s,Status=%s WHERE StaffID=%s"
                 cursor.execute(insert_sql, (name, email, phone, role,department,salary,status,staffID))
-                cursor.commit()
+                db_conn.commit()
                 cursor.close()
 
             except pymysql.OperationalError:
@@ -249,7 +249,7 @@ def EditStaff():
                 cursor = db_conn.cursor()            
                 insert_sql = "UPDATE staff SET Name=%s, Email=%s, Phone=%s,RoleID=%s,DepartmentID=%s,Salary=%s,Status=%s WHERE StaffID=%s"
                 cursor.execute(insert_sql, (name, email, phone, role,department,salary,status,staffID))
-                cursor.commit()
+                db_conn.commit()
                 cursor.close()
             
             print("Data inserted in MySQL RDS... uploading image to S3...")
@@ -270,14 +270,14 @@ def delete(ID):
         cursor = db_conn.cursor()   
         delete_sql = "DELETE FROM staff WHERE StaffID=%s"
         cursor.execute(delete_sql, (ID))
-        cursor.commit()
+        db_conn.commit()
         cursor.close()
     except pymysql.OperationalError:
         db_conn.ping()
         cursor = db_conn.cursor()   
         delete_sql = "DELETE FROM staff WHERE StaffID=%s"
         cursor.execute(delete_sql, (ID))
-        cursor.commit()
+        db_conn.commit()
         cursor.close()
     
     response = s3_client.delete_object(Bucket=custombucket, Key=image_file_name)
