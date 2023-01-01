@@ -40,12 +40,12 @@ except pymysql.OperationalError:
         getNumber = row[0]
     cursor.close()
     
-session['number']= str(getNumber)
-tempSession = session['number']
+
 
 @app.route("/", methods=['GET', 'POST'])
 def home():
-    
+    session['number']= str(getNumber)
+    tempSession = session['number']
     staffdata=""
     departdata=""
     roledata=""
