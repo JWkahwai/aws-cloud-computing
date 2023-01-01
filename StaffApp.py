@@ -37,10 +37,10 @@ def home():
     cursor = db_conn.cursor()
     cursor.execute("SELECT staff.StaffID,staff.Name,staff.Email,staff.Phone,role.RoleName,department.DepartmentName,staff.Salary,staff.Status,staff.ImageURL,staff.RoleID,staff.DepartmentID FROM staff LEFT JOIN role ON staff.RoleID=role.RoleID LEFT JOIN department ON staff.DepartmentID=department.DepartmentID")
     staffdata = cursor.fetchall()
+    cursor.execute("SELECT * FROM department")
+    departdata = cursor.fetchall()
     cursor.execute("SELECT * FROM role")
     roledata = cursor.fetchall()
-    cursor.execute("SELECT * FROM role")
-    roledata = cursor2.fetchall()
     cursor.close()
     return render_template('Staff.html',depart=departdata,role=roledata,staff=staffdata,sessionNumber=tempSession)
 
