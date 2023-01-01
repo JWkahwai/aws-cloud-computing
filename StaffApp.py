@@ -133,17 +133,17 @@ def AddStaff():
 
     if image_file.filename == "":
         return "Please select a file"
-
+    cursor = db_conn.cursor()
     try:
         getID=0
-        #About Us data
+
         try:
             cursor = db_conn.cursor()
             insert_sql = "INSERT INTO staff(Name,Email, Phone, RoleID, DepartmentID, Salary, Status) VALUES (%s,%s, %s, %s, %s, %s, 'Active')"
             cursor.execute(insert_sql, (name,email, phone, role, department, salary))
             getID= cursor.lastrowid
             cursor.commit()
-            cursor.close()
+            
 
         except pymysql.OperationalError:
             db_conn.ping()
@@ -152,7 +152,6 @@ def AddStaff():
             cursor.execute(insert_sql, (name,email, phone, role, department, salary))
             getID= cursor.lastrowid
             cursor.commit()
-            cursor.close()
         
         # Uplaod image file in S3 #
         image_file_name = "staff-id-" + str(getID) + "_image_file"
@@ -179,7 +178,6 @@ def AddStaff():
                 UpdateImage_sql = "UPDATE staff SET ImageURL=%s WHERE StaffID=%s"
                 cursor.execute(UpdateImage_sql, (object_url,getID))
                 cursor.commit()
-                cursor.close()
 
             except pymysql.OperationalError:
                 db_conn.ping()
@@ -187,12 +185,12 @@ def AddStaff():
                 UpdateImage_sql = "UPDATE staff SET ImageURL=%s WHERE StaffID=%s"
                 cursor.execute(UpdateImage_sql, (object_url,getID))
                 cursor.commit()
-                cursor.close()
 
         except Exception as e:
             return str(e)
 
     finally:
+        cursor.close()
         titleData = "Data Added"
         return render_template('StaffOutput.html',title=titleData)
 
