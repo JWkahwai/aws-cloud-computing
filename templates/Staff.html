@@ -407,34 +407,17 @@ $(document).ready(function(){
       $('#ShowImage').attr("src",Image);
     });
     
-    var myinput = document.getElementById('getSalary');
-myinput.addEventListener('getSalary', function() {
-  var val = this.value;
-  val = val.replace(/[^0-9\.]/g,'');
-  
-  if(val != "") {
-    valArr = val.split('.');
-    valArr[0] = (parseInt(valArr[0],10)).toLocaleString();
-    val = valArr.join('.');
-  }
-  
-  this.value = val;
-});
-    
-var myinput = document.getElementById('Salary');
-myinput.addEventListener('getSalary', function() {
-  var val = this.value;
-  val = val.replace(/[^0-9\.]/g,'');
-  
-  if(val != "") {
-    valArr = val.split('.');
-    valArr[0] = (parseInt(valArr[0],10)).toLocaleString();
-    val = valArr.join('.');
-  }
-  
-  this.value = val;
-});
-    
+    $(document).on('keyup','#Salary',function()){
+        var val = $(this).text()
+        val = val.replace(/[^0-9\.]/g,'');
+        if(val != "") {
+            valArr = val.split('.');
+            valArr[0] = (parseInt(valArr[0],10)).toLocaleString();
+            val = valArr.join('.');
+        }
+        $(this).text() = val
+    }
+    });
 });
     
 
