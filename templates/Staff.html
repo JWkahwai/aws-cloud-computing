@@ -74,7 +74,8 @@
                                 <th style="text-align:center;">Image</th>
                                 <th style="text-align:center;">Email</th>
                                 <th style="text-align:center;">Phone</th>
-                                <th style="text-align:center;">Role(Department)</th>
+                                <th style="text-align:center;">Role</th>
+                                <th style="text-align:center;">Department</th>
                                 <th style="text-align:center;">Salary</th>
                                 <th style="text-align:center;">Status</th>
                                 <th style="text-align:center;">Edit</th>
@@ -89,8 +90,9 @@
                                 <td style='text-align:center;'><img src='https://s3{{locationS3}}.amazonaws.com/{{staffBucket}}/staff-id-{{row.0}}_image_file' alt='No Image' style='width:100px;height:100px' data-toggle='modal' data-target='#imagemodal' id='ZoomImage'></td>
                                 <td style='text-align:center;'>{{row.2}}</td>
                                 <td style='text-align:center;'>{{row.3}}</td>
-                                <td style='text-align:center;'>{{row.4}}({{row.5}})</td>
-                                <td style='text-align:center;'>RM{{row.6}}</td>
+                                <td style='text-align:center;'>{{row.4}}</td>
+                                <td style='text-align:center;'>{{row.5}}</td>
+                                <td style='text-align:center;'>RM {{row.6}}</td>
                                 <td style='text-align:center;'>{{row.7}}</td>
                                 <td style='text-align:center;'><a href="#" class="btn btn-primary btn-xs editFunction" data-id1="{{row.0}}" data-id2="{{row.1}}" 
                                     data-id3="{{row.2}}" data-id4="{{row.3}}" data-id5="{{row.9}}" data-id6="{{row.10}}" data-id7="{{row.6}}" data-id8="{{row.7}}" data-toggle="modal" data-target="#modaledit">Edit</a></td>
@@ -137,7 +139,7 @@
         
                 <div class="modal-body">
                     <div class="form-group row" style="margin:10px;">
-                        <form action="/addstaff" autocomplete="on" method = "POST" enctype="multipart/form-data">
+                        <form name="AddStaff" action="/addstaff" autocomplete="on" method = "POST" enctype="multipart/form-data" onsubmit="return validateAddStaff();">
                         <div class="form-row">
                             <div class="input-group mb-3">
                                 <span class="input-group-text" id="basic-addon1">Name</span>
@@ -217,14 +219,14 @@
         
                 <div class="modal-body">
                     <div class="form-group row" style="margin:10px;">
-                        <form action="/update" autocomplete="on" method="POST" enctype="multipart/form-data">
+                        <form name="EditStaff" action="/update" autocomplete="on" method="POST" enctype="multipart/form-data" onsubmit="return validateEditStaff();">
                             <div class="form-row">
                                 <div class="input-group mb-3">
                                     <span class="input-group-text" id="basic-addon1">Name</span>
                                     <input type="text" name="getName" id="getName"  class="form-control" placeholder="William Wong" aria-label="William Wong" aria-describedby="basic-addon1" required>
                                 </div>
                                 <div class="input-group mb-3">
-                                    <span class="input-group-text" id="basic-addon2">Name</span>
+                                    <span class="input-group-text" id="basic-addon2">Email</span>
                                     <input type="email" name="getEmail" id="getEmail" class="form-control" placeholder="william@gmail.com" aria-label="william@gmail.com" aria-describedby="basic-addon2" required>
                                 </div>
                                 <div class="input-group mb-3">
@@ -281,7 +283,7 @@
                                           <label class="custom-file-label" for="edtimage">Choose file</label>
                                         </div>
                                       </div>
-                            <input type="text" name="getStaffID" id="getStaffID" />
+                            <input type="hidden" name="getStaffID" id="getStaffID" />
                             </div>
                         </div>
                     </div>
@@ -306,7 +308,7 @@ $(document).ready( function () {
     "order":[],
     "columnDefs":[
       {
-        "targets":[7],
+        "targets":[8,9],
         "orderable":false,
 
 
@@ -363,4 +365,86 @@ $(document).ready(function(){
     });
     
 });
+    
+var myinput = document.getElementById('getSalary');
+myinput.addEventListener('getSalary', function() {
+  var val = this.value;
+  val = val.replace(/[^0-9\.]/g,'');
+  
+  if(val != "") {
+    valArr = val.split('.');
+    valArr[0] = (parseInt(valArr[0],10)).toLocaleString();
+    val = valArr.join('.');
+  }
+  
+  this.value = val;
+});
+    
+var myinput = document.getElementById('Salary');
+myinput.addEventListener('getSalary', function() {
+  var val = this.value;
+  val = val.replace(/[^0-9\.]/g,'');
+  
+  if(val != "") {
+    valArr = val.split('.');
+    valArr[0] = (parseInt(valArr[0],10)).toLocaleString();
+    val = valArr.join('.');
+  }
+  
+  this.value = val;
+});
+    
+    function validateAddStaff(){
+        valid=true;
+        if(document.AddStaff.Name.value=="" || document.AddStaff.Name.value==null){
+          Swal.fire("Name cannot be blank", "Please enter Staff's name", "error");
+            valid=false;
+        }else if(document.AddStaff.Email.value=="" || document.AddStaff.Email.value==null){
+           Swal.fire("Email cannot be blank", "Please enter Staff's email", "error");
+             valid=false;
+         }else if(document.AddStaff.Phone.value=="" || document.AddStaff.Phone.value==null){
+           Swal.fire("Phone cannot be blank", "Please enter Staff's phone", "error");
+             valid=false;
+         }else if(document.AddStaff.Role.value==""){
+          Swal.fire("Role cannot be blank", "Please select the Staff's role", "error");
+            valid=false;
+        }else if(document.AddStaff.Department.value==""){
+          Swal.fire("Department cannot be blank", "Please select the Staff's department", "error");
+            valid=false;
+        }else if(document.AddStaff.Salary.value=="" || document.AddStaff.Salary.value==null){
+           Swal.fire("Salary cannot be blank", "Please enter Staff's Salary", "error");
+             valid=false;
+         }else if(document.AddStaff.file.value==""){
+           Swal.fire("Image cannot be blank", "Please choose a file or drag a photo to text field", "error");
+             valid=false;
+         }
+          return valid;
+    }
+    
+    function validateEditStaff(){
+        valid=true;
+        if(document.EditStaff.getName.value=="" || document.EditStaff.getName.value==null){
+          Swal.fire("Name cannot be blank", "Please enter Staff's name", "error");
+            valid=false;
+        }else if(document.EditStaff.getEmail.value=="" || document.EditStaff.getEmail.value==null){
+           Swal.fire("Email cannot be blank", "Please enter Staff's email", "error");
+             valid=false;
+         }else if(document.EditStaff.getPhone.value=="" || document.EditStaff.getPhone.value==null){
+           Swal.fire("Phone cannot be blank", "Please enter Staff's phone", "error");
+             valid=false;
+         }else if(document.EditStaff.getRole.value==""){
+          Swal.fire("Role cannot be blank", "Please select the Staff's role", "error");
+            valid=false;
+        }else if(document.EditStaff.getDepartment.value==""){
+          Swal.fire("Department cannot be blank", "Please select the Staff's department", "error");
+            valid=false;
+        }else if(document.EditStaff.getSalary.value=="" || document.EditStaff.getSalary.value==null){
+           Swal.fire("Salary cannot be blank", "Please enter Staff's Salary", "error");
+             valid=false;
+         }else if(document.EditStaff.file.value==""){
+           Swal.fire("Image cannot be blank", "Please choose a file or drag a photo to text field", "error");
+             valid=false;
+         }
+          return valid;
+    }
 </script>
