@@ -18,18 +18,13 @@ db_conn = connections.Connection(
     password=custompass,
     db=customdb)
 
-    
-#conect database
-def connect(self):
-    self.conn = db_conn
-
 output = {}
 table = 'staff'
     
 #testing for session
 getNumber = 0;
 try:
-    cursor = self.conn.cursor()
+    cursor = db_conn.cursor()
     cursor.execute("SELECT FLOOR(5 + RAND()*(10 - 5 + 1)) AS Random_Number")
     temp = cursor.fetchall()
     for row in temp:
@@ -37,8 +32,8 @@ try:
     cursor.close()
     
 except pymysql.OperationalError:
-    self.connect()
-    cursor = self.conn.cursor()
+    db_conn.ping()
+    cursor = db_conn.cursor()
     cursor.execute("SELECT FLOOR(5 + RAND()*(10 - 5 + 1)) AS Random_Number")
     temp = cursor.fetchall()
     for row in temp:
@@ -55,42 +50,42 @@ def home():
     
     #Staff data
     try:
-        cursor = self.conn.cursor()
+        cursor = db_conn.cursor()
         cursor.execute("SELECT staff.StaffID,staff.Name,staff.Email,staff.Phone,role.RoleName,department.DepartmentName,staff.Salary,staff.Status,staff.ImageURL,staff.RoleID,staff.DepartmentID FROM staff LEFT JOIN role ON staff.RoleID=role.RoleID LEFT JOIN department ON staff.DepartmentID=department.DepartmentID")
         staffdata = cursor.fetchall()
         cursor.close()
     
     except pymysql.OperationalError:
-        self.connect()
-        cursor = self.conn.cursor()
+        db_conn.ping()
+        cursor = db_conn.cursor()
         cursor.execute("SELECT staff.StaffID,staff.Name,staff.Email,staff.Phone,role.RoleName,department.DepartmentName,staff.Salary,staff.Status,staff.ImageURL,staff.RoleID,staff.DepartmentID FROM staff LEFT JOIN role ON staff.RoleID=role.RoleID LEFT JOIN department ON staff.DepartmentID=department.DepartmentID")
         staffdata = cursor.fetchall()
         cursor.close()
         
     #Department data(Dropdown list)
     try:
-        cursor = self.conn.cursor()
+        cursor = db_conn.cursor()
         cursor.execute("SELECT * FROM department")
         departdata = cursor.fetchall()
         cursor.close()
     
     except pymysql.OperationalError:
-        self.connect()
-        cursor = self.conn.cursor()
+        db_conn.ping()
+        cursor = db_conn.cursor()
         cursor.execute("SELECT * FROM department")
         departdata = cursor.fetchall()
         cursor.close()
     
     #role data(Dropdown list)
     try:
-        cursor = self.conn.cursor()        
+        cursor = db_conn.cursor()    
         cursor.execute("SELECT * FROM role")
         roledata = cursor.fetchall()
         cursor.close()
     
     except pymysql.OperationalError:
-        self.connect()
-        cursor = self.conn.cursor()        
+        db_conn.ping()
+        cursor = db_conn.cursor()      
         cursor.execute("SELECT * FROM role")
         roledata = cursor.fetchall()
         cursor.close()
@@ -110,14 +105,14 @@ def about():
     staffdata=""
     #About Us data
     try:
-        cursor = self.conn.cursor()        
+        cursor = db_conn.cursor()     
         cursorAbout.execute("SELECT staff.Name,staff.Email,staff.Phone,role.RoleName,department.DepartmentName,staff.ImageURL FROM staff LEFT JOIN role ON staff.RoleID=role.RoleID LEFT JOIN department ON staff.DepartmentID=department.DepartmentID WHERE staff.DepartmentID=1 AND staff.Status='Active' ORDER BY RoleID ASC")
         staffdata = cursorAbout.fetchall()
         cursor.close()
     
     except pymysql.OperationalError:
-        self.connect()
-        cursor = self.conn.cursor()        
+        db_conn.ping()
+        cursor = db_conn.cursor()       
         cursorAbout.execute("SELECT staff.Name,staff.Email,staff.Phone,role.RoleName,department.DepartmentName,staff.ImageURL FROM staff LEFT JOIN role ON staff.RoleID=role.RoleID LEFT JOIN department ON staff.DepartmentID=department.DepartmentID WHERE staff.DepartmentID=1 AND staff.Status='Active' ORDER BY RoleID ASC")
         staffdata = cursorAbout.fetchall()
         cursor.close()
@@ -141,7 +136,7 @@ def AddStaff():
         getID=0
         #About Us data
         try:
-            cursor = self.conn.cursor()
+            cursor = db_conn.cursor()
             insert_sql = "INSERT INTO staff(Name,Email, Phone, RoleID, DepartmentID, Salary, Status) VALUES (%s,%s, %s, %s, %s, %s, 'Active')"
             cursor = db_conn.cursor()
             cursor.execute(insert_sql, (name,email, phone, role, department, salary))
@@ -150,8 +145,8 @@ def AddStaff():
             cursor.close()
 
         except pymysql.OperationalError:
-            self.connect()
-            cursor = self.conn.cursor()
+            db_conn.ping()
+            cursor = db_conn.cursor() 
             insert_sql = "INSERT INTO staff(Name,Email, Phone, RoleID, DepartmentID, Salary, Status) VALUES (%s,%s, %s, %s, %s, %s, 'Active')"
             cursor = db_conn.cursor()
             cursor.execute(insert_sql, (name,email, phone, role, department, salary))
@@ -180,15 +175,15 @@ def AddStaff():
                 image_file_name)
             
             try:
-                cursor = self.conn.cursor()
+                cursor = db_conn.cursor() 
                 UpdateImage_sql = "UPDATE staff SET ImageURL=%s WHERE StaffID=%s"
                 cursor.execute(UpdateImage_sql, (object_url,getID))
                 cursor.commit()
                 cursor.close()
 
             except pymysql.OperationalError:
-                self.connect()
-                cursor = self.conn.cursor()
+                db_conn.ping()
+                cursor = db_conn.cursor() 
                 UpdateImage_sql = "UPDATE staff SET ImageURL=%s WHERE StaffID=%s"
                 cursor.execute(UpdateImage_sql, (object_url,getID))
                 cursor.commit()
@@ -217,15 +212,15 @@ def EditStaff():
     if edit_image.filename == "":
         try:
             try:
-                cursor = self.conn.cursor()
+                cursor = db_conn.cursor()
                 insert_sql = "UPDATE staff SET Name=%s, Email=%s, Phone=%s,RoleID=%s,DepartmentID=%s,Salary=%s,Status=%s WHERE StaffID=%s"
                 cursor.execute(insert_sql, (name, email, phone, role,department,salary,status,staffID))
                 cursor.commit()
                 cursor.close()
 
             except pymysql.OperationalError:
-                self.connect()
-                cursor = self.conn.cursor()            
+                db_conn.ping()
+                cursor = db_conn.cursor()          
                 insert_sql = "UPDATE staff SET Name=%s, Email=%s, Phone=%s,RoleID=%s,DepartmentID=%s,Salary=%s,Status=%s WHERE StaffID=%s"
                 cursor.execute(insert_sql, (name, email, phone, role,department,salary,status,staffID))
                 cursor.commit()
@@ -241,15 +236,15 @@ def EditStaff():
             image_file_name = "staff-id-" + str(staffID) + "_image_file"
             s3 = boto3.resource('s3')
             try:
-                cursor = self.conn.cursor()
+                cursor = db_conn.cursor()
                 insert_sql = "UPDATE staff SET Name=%s, Email=%s, Phone=%s,RoleID=%s,DepartmentID=%s,Salary=%s,Status=%s WHERE StaffID=%s"
                 cursorEditStaff1.execute(insert_sql, (name, email, phone, role,department,salary,status,staffID))
                 cursor.commit()
                 cursor.close()
 
             except pymysql.OperationalError:
-                self.connect()
-                cursor = self.conn.cursor()            
+                db_conn.ping()
+                cursor = db_conn.cursor()            
                 insert_sql = "UPDATE staff SET Name=%s, Email=%s, Phone=%s,RoleID=%s,DepartmentID=%s,Salary=%s,Status=%s WHERE StaffID=%s"
                 cursorEditStaff1.execute(insert_sql, (name, email, phone, role,department,salary,status,staffID))
                 cursor.commit()
@@ -277,14 +272,14 @@ def delete(ID):
     s3_client = boto3.client("s3")
     image_file_name = "staff-id-" + str(ID) + "_image_file"
     try:
-        cursor = self.conn.cursor()
+        cursor = db_conn.cursor()   
         delete_sql = "DELETE FROM staff WHERE StaffID=%s"
         cursor.execute(delete_sql, (ID))
         cursor.commit()
         cursor.close()
     except pymysql.OperationalError:
-        self.connect()        
-        cursor = self.conn.cursor()
+        db_conn.ping()
+        cursor = db_conn.cursor()   
         delete_sql = "DELETE FROM staff WHERE StaffID=%s"
         cursor.execute(delete_sql, (ID))
         cursor.commit()
