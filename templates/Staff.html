@@ -407,7 +407,7 @@ $(document).ready(function(){
       $('#ShowImage').attr("src",Image);
     });
     
-    $(document).on('keyup','#Salary',function()){
+    $(document).on('keyup','#Salary',function(){
         var val = $(this).text();
         val = val.replace(/[^0-9\.]/g,'');
         if(val != "") {
