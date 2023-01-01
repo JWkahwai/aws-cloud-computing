@@ -407,7 +407,7 @@ $(document).ready(function(){
       $('#ShowImage').attr("src",Image);
     });
     
-    $(document).on('keyup','#Salary',function(){
+    $(document).on('keyup','#Salary,#getSalary',function(){
         var data = $(this).val();
         data = data.replace(/[^0-9\.]/g,'');
         if(data != "") {
@@ -417,6 +417,7 @@ $(document).ready(function(){
         }
         $(this).val(data);
     });
+    
 });
     
 
