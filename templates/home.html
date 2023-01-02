@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Staff List</title>
+        <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+        <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.5/css/responsive.dataTables.min.css">
+        <script src="https://cdn.datatables.net/responsive/2.2.5/js/dataTables.responsive.min.js"></script>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+        <style>
+
+
+            .navbar {
+              background-color: white;
+              -webkit-box-shadow: 1px 3px 10px -5px rgba(131,163,166,1);
+              -moz-box-shadow: 1px 3px 10px -5px rgba(131,163,166,1);
+              box-shadow: 1px 3px 10px -5px rgba(131,163,166,1);
+        
+            }
+        
+            .tab {
+              display: inline-block;
+              margin-left: 30px;
+            }
+        
+            </style>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light">
+
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+    
+            </button>
+    
+            <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav">
+                <li class="nav-item active">
+                  <a class="nav-link" href="Staff.html">Staff List<span class="sr-only">(current)</span></a>
+                </li>
+    
+    
+    
+                <li class="nav-item">
+                    <a class="nav-link" href="/about">About us</a>
+                </li>
+                </ul>
+            </div>
+        </nav>
+    <div class="container-fluid">
+        <div class="card shadow mb-4" style="margin-top:2%">
+            <div class="card-body">
+            <h2>Staff List</h2>
+                <input type="button" name="BtnAddStaff" id="BtnAddStaff"  class="btn btn-info" data-toggle="modal" data-target="#add_data_Modal" style="float: right;" value="Add New Staff">
+
+                <div class="table-responsive">
+                    <table class="responsive nowrap" style="width:100%" id="staff_table" >
+                        <div>
+                            <input type="text" id="S_ID"  placeholder="Search Staff ID">
+                            <input type="text" id="S_Name"  placeholder="Search Name">
+                        </div>
+                        <thead>
+                            <tr>
+                                <th style="text-align:center;">Staff ID</th>
+                                <th style="text-align:center;">Name</th>
+                                <th style="text-align:center;">Image</th>
+                                <th style="text-align:center;">Email</th>
+                                <th style="text-align:center;">Phone</th>
+                                <th style="text-align:center;">Role(Department)</th>
+                                <th style="text-align:center;">Salary</th>
+                                <th style="text-align:center;">Status</th>
+                                <th style="text-align:center;">Edit</th>
+                                <th style="text-align:center;">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in staff %}
+                            <tr>
+                                <td style='text-align:center;'>{{row.0}}</td>
+                                <td style='text-align:center;'>{{row.1}}</td>
+                                <td style='text-align:center;'><img src='{{row.8}}' alt='No Image' style='width:100px;height:100px' data-toggle='modal' data-target='#imagemodal' id='ZoomImage'></td>
+                                <td style='text-align:center;'>{{row.2}}</td>
+                                <td style='text-align:center;'>{{row.3}}</td>
+                                <td style='text-align:center;'>{{row.4}}({{row.5}})</td>
+                                <td style='text-align:center;'>RM{{row.6}}</td>
+                                <td style='text-align:center;'>{{row.7}}</td>
+                                <td style='text-align:center;'><a href="#" class="btn btn-primary btn-xs editFunction" data-id1="{{row.0}}" data-id2="{{row.1}}" 
+                                    data-id3="{{row.2}}" data-id4="{{row.3}}" data-id5="{{row.9}}" data-id6="{{row.10}}" data-id7="{{row.6}}" data-id8="{{row.7}}" data-toggle="modal" data-target="#modaledit">Edit</a></td>
+                                <td style='text-align:center;'><a href="/delete/{{row.0}}" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure For Delete?')">Delete</a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Image-->
+    <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel"><b>View Image</b></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <a href='#'><img id='ShowImage' src='' alt='Image' style='width:450px;height:450px;'></a>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        </div>
+    </div><!-- end modal image-->
+
+    <!-- add staff modal -->
+    <div class="modal fade" id="add_data_Modal" tabindex="-1" role="dialog" aria-labelledby="TitleStaff" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="TitleColour">Add New Staff</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+        
+                <div class="modal-body">
+                    <div class="form-group row" style="margin:10px;">
+                        <form action="/addstaff" autocomplete="on" method = "POST" enctype="multipart/form-data">
+                        <div class="form-row">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1">Name</span>
+                                <input type="text" name="Name" id="Name"  class="form-control" placeholder="William Wong" aria-label="William Wong" aria-describedby="basic-addon1" required>
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon2">Email</span>
+                                <input type="email" name="Email" id="Email" class="form-control" placeholder="william@gmail.com" aria-label="william@gmail.com" aria-describedby="basic-addon2" required>
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon3">Phone</span>
+                                <input type="text" name="Phone" id="Phone" class="form-control" placeholder="01XXXXXXXX" aria-label="01XXXXXXXX" aria-describedby="basic-addon3" required>
+                            </div>
+                            
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                  <label class="input-group-text" for="Role">Role</label>
+                                </div>
+                                <select class="custom-select" id="Role" name="Role">
+                                    <option selected value="">Choose one role</option>
+                                    {% for rowRole in role %}
+                                    <option value="{{rowRole.0}}">{{rowRole.1}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                  <label class="input-group-text" for="Department">Department</label>
+                                </div>
+                                <select class="custom-select" id="Department" name="Department">
+                                    <option selected value="">Choose one department</option>
+                                    {% for rowDepart in depart %}
+                                    <option value="{{rowDepart.0}}">{{rowDepart.1}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon4">Salary</span>
+                                <input type="text" name="Salary" id="Salary" class="form-control" placeholder="1500" aria-label="1500" aria-describedby="basic-addon4" required>
+                            </div>
+                            
+                            <div class="form-group col-md-12">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                      <span class="input-group-text">Upload</span>
+                                    </div>
+                                    <div class="custom-file">
+                                      <input type="file" name="image" id="image" class="custom-file-input" id="inputGroupFile01">
+                                      <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                                    </div>
+                                  </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" name="insertStaff" id="insertStaff" value="Insert" class="btn btn-info" />
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div><!-- end add modal -->
+
+    <!-- Edit staff modal -->
+    <div class="modal fade" id="modaledit" tabindex="-1" role="dialog" aria-labelledby="TitleStaff" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="TitleColour">Edit Staff</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+        
+                <div class="modal-body">
+                    <div class="form-group row" style="margin:10px;">
+                        <form action="/update" autocomplete="on" method="POST" enctype="multipart/form-data">
+                            <div class="form-row">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon1">Name</span>
+                                    <input type="text" name="getName" id="getName"  class="form-control" placeholder="William Wong" aria-label="William Wong" aria-describedby="basic-addon1" required>
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon2">Name</span>
+                                    <input type="email" name="getEmail" id="getEmail" class="form-control" placeholder="william@gmail.com" aria-label="william@gmail.com" aria-describedby="basic-addon2" required>
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon3">Phone</span>
+                                    <input type="text" name="getPhone" id="getPhone" class="form-control" placeholder="01XXXXXXXX" aria-label="01XXXXXXXX" aria-describedby="basic-addon3" required>
+                                </div>
+                                
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                      <label class="input-group-text" for="getRole">Role</label>
+                                    </div>
+                                    <select class="custom-select" id="getRole" name="getRole">
+                                        <option selected value="">Choose one role</option>
+                                        {% for rowRole in role %}
+                                        <option value="{{rowRole.0}}">{{rowRole.1}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                      <label class="input-group-text" for="getDepartment">Department</label>
+                                    </div>
+                                    <select class="custom-select" id="getDepartment" name="getDepartment">
+                                        <option selected value="">Choose one department</option>
+                                        {% for rowDepart in depart %}
+                                        <option value="{{rowDepart.0}}">{{rowDepart.1}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+    
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon4">Salary</span>
+                                    <input type="text" name="getSalary" id="getSalary" class="form-control" placeholder="1500" aria-label="1500" aria-describedby="basic-addon4" required>
+                                </div>
+                                
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                      <label class="input-group-text" for="getStatus">Status</label>
+                                    </div>
+                                    <select class="custom-select" id="getStatus" name="getStatus">
+                                        <option value="Active">Active</option>
+                                        <option value="Inactive">Inactive</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group col-md-12">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                          <span class="input-group-text">Upload</span>
+                                        </div>
+                                        <div class="custom-file">
+                                          <input type="file" name="edtimage" class="custom-file-input" id="edtimage">
+                                          <label class="custom-file-label" for="edtimage">Choose file</label>
+                                        </div>
+                                      </div>
+                            <input type="text" name="getStaffID" id="getStaffID" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" name="insertStaff" id="insertStaff" value="Insert" class="btn btn-secondary" />
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div><!-- end Edit modal -->
+</body>
+</html>
+
+
+<script>
+$(document).ready( function () {
+  //Link DataTable
+  var table =  $('#staff_table').DataTable({
+    "showNEntries":true,
+    "order":[],
+    "columnDefs":[
+      {
+        "targets":[7],
+        "orderable":false,
+
+
+      },
+    ],
+    language: {
+      search: "_INPUT_",
+      searchPlaceholder: "Search records"
+    }
+  });
+
+$('#S_ID').on('keyup',function(){
+  table
+  .column(0)
+  .search(this.value)
+  .draw();
+})
+
+//DataTable Search
+$('#S_Name').on('keyup',function(){
+  table
+  .column(1)
+  .search(this.value)
+  .draw();
+})
+});
+
+//Staff Add
+$(document).ready(function(){  
+      $(document).on('click', '.editFunction', function(){  
+            var getStaffID = $(this).data("id1");
+            var getName = $(this).data("id2");
+            var getEmail = $(this).data("id3");
+            var getPhone = $(this).data("id4");
+            var getRole = $(this).data("id5");
+            var getDepart = $(this).data("id6");
+            var getSalary = $(this).data("id7");
+            var getStatus = $(this).data("id8");
+            
+            $('#getName').val(getName); 
+            $('#getEmail').val(getEmail);  
+            $('#getPhone').val(getPhone); 
+            $('#getRole').val(getRole);
+            $('#getDepartment').val(getDepart);
+            $('#getSalary').val(getSalary);
+            $('#getStatus').val(getStatus);
+            $('#getStaffID').val(getStaffID);
+      });  
+
+      
+    $(document).on('click', '#ZoomImage', function(){
+        var Image = $(this).attr('src');
+      $('#ShowImage').attr("src",Image);
+    });
+    
+});
+</script>
