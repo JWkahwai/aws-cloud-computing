@@ -61,14 +61,14 @@ def staffList():
     #Staff data
     try:
         cursor = db_conn.cursor()
-        cursor.execute("SELECT staff.StaffID,staff.Name,staff.Email,staff.Phone,role.RoleName,department.DepartmentName,staff.Salary,staff.Status,staff.ImageURL,staff.RoleID,staff.DepartmentID FROM staff LEFT JOIN role ON staff.RoleID=role.RoleID LEFT JOIN department ON staff.DepartmentID=department.DepartmentID")
+        cursor.execute("SELECT staff.StaffID,staff.Name,staff.Email,staff.Phone,role.RoleName,department.DepartmentName,staff.Salary,staff.Status,staff.RoleID,staff.DepartmentID FROM staff LEFT JOIN role ON staff.RoleID=role.RoleID LEFT JOIN department ON staff.DepartmentID=department.DepartmentID")
         staffdata = cursor.fetchall()
         cursor.close()
     
     except:
         db_conn.ping()
         cursor = db_conn.cursor()
-        cursor.execute("SELECT staff.StaffID,staff.Name,staff.Email,staff.Phone,role.RoleName,department.DepartmentName,staff.Salary,staff.Status,staff.ImageURL,staff.RoleID,staff.DepartmentID FROM staff LEFT JOIN role ON staff.RoleID=role.RoleID LEFT JOIN department ON staff.DepartmentID=department.DepartmentID")
+        cursor.execute("SELECT staff.StaffID,staff.Name,staff.Email,staff.Phone,role.RoleName,department.DepartmentName,staff.Salary,staff.Status,staff.RoleID,staff.DepartmentID FROM staff LEFT JOIN role ON staff.RoleID=role.RoleID LEFT JOIN department ON staff.DepartmentID=department.DepartmentID")
         staffdata = cursor.fetchall()
         cursor.close()
         
@@ -188,21 +188,6 @@ def AddStaff():
                 s3_location,
                 custombucket,
                 image_file_name)
-            
-            try:
-                cursor = db_conn.cursor() 
-                UpdateImage_sql = "UPDATE staff SET ImageURL=%s WHERE StaffID=%s"
-                cursor.execute(UpdateImage_sql, (object_url,getID))
-                db_conn.commit()
-                cursor.close()
-
-            except:
-                db_conn.ping()
-                cursor = db_conn.cursor() 
-                UpdateImage_sql = "UPDATE staff SET ImageURL=%s WHERE StaffID=%s"
-                cursor.execute(UpdateImage_sql, (object_url,getID))
-                db_conn.commit()
-                cursor.close()
 
         except Exception as e:
             return str(e)
