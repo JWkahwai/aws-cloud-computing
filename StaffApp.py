@@ -42,10 +42,16 @@ except:
         getNumber = row[0]
     cursor.close()
     
-
-
 @app.route("/", methods=['GET', 'POST'])
 def home():
+    session['number']= str(getNumber)
+    tempSession = session['number']
+   
+    return render_template('index.html',sessionNumber=tempSession)
+
+
+@app.route("/staffList", methods=['GET', 'POST'])
+def staffList():
     session['number']= str(getNumber)
     tempSession = session['number']
     staffdata=""
@@ -54,7 +60,6 @@ def home():
     
     #Staff data
     try:
-        db_conn.ping()
         cursor = db_conn.cursor()
         cursor.execute("SELECT staff.StaffID,staff.Name,staff.Email,staff.Phone,role.RoleName,department.DepartmentName,staff.Salary,staff.Status,staff.ImageURL,staff.RoleID,staff.DepartmentID FROM staff LEFT JOIN role ON staff.RoleID=role.RoleID LEFT JOIN department ON staff.DepartmentID=department.DepartmentID")
         staffdata = cursor.fetchall()
@@ -69,7 +74,6 @@ def home():
         
     #Department data(Dropdown list)
     try:
-        db_conn.ping()
         cursor = db_conn.cursor()
         cursor.execute("SELECT * FROM department")
         departdata = cursor.fetchall()
@@ -84,7 +88,6 @@ def home():
     
     #role data(Dropdown list)
     try:
-        db_conn.ping()
         cursor = db_conn.cursor()    
         cursor.execute("SELECT * FROM role")
         roledata = cursor.fetchall()
@@ -112,7 +115,6 @@ def about():
     staffdata=""
     #About Us data
     try:
-        db_conn.ping()
         cursor = db_conn.cursor()     
         cursor.execute("SELECT staff.Name,staff.Email,staff.Phone,role.RoleName,department.DepartmentName,staff.StaffID FROM staff LEFT JOIN role ON staff.RoleID=role.RoleID LEFT JOIN department ON staff.DepartmentID=department.DepartmentID WHERE staff.DepartmentID=1 AND staff.Status='Active' ORDER BY staff.RoleID ASC")
         staffdata = cursor.fetchall()
@@ -151,7 +153,6 @@ def AddStaff():
         getID=0
 
         try:
-            db_conn.ping()
             cursor = db_conn.cursor()
             insert_sql = "INSERT INTO staff(Name,Email, Phone, RoleID, DepartmentID, Salary, Status) VALUES (%s,%s, %s, %s, %s, %s, 'Active')"
             cursor.execute(insert_sql, (name,email, phone, role, department, salary))
@@ -159,7 +160,6 @@ def AddStaff():
             db_conn.commit()
             cursor.close()
             
-
         except:
             db_conn.ping()
             cursor = db_conn.cursor() 
@@ -190,7 +190,6 @@ def AddStaff():
                 image_file_name)
             
             try:
-                db_conn.ping()
                 cursor = db_conn.cursor() 
                 UpdateImage_sql = "UPDATE staff SET ImageURL=%s WHERE StaffID=%s"
                 cursor.execute(UpdateImage_sql, (object_url,getID))
@@ -229,7 +228,6 @@ def EditStaff():
     if edit_image.filename == "":
         try:
             try:
-                db_conn.ping()
                 cursor = db_conn.cursor()
                 insert_sql = "UPDATE staff SET Name=%s, Email=%s, Phone=%s,RoleID=%s,DepartmentID=%s,Salary=%s,Status=%s WHERE StaffID=%s"
                 cursor.execute(insert_sql, (name, email, phone, role,department,salary,status,staffID))
@@ -254,7 +252,6 @@ def EditStaff():
             image_file_name = "staff-id-" + str(staffID) + "_image_file"
             s3 = boto3.resource('s3')
             try:
-                db_conn.ping()
                 cursor = db_conn.cursor()
                 insert_sql = "UPDATE staff SET Name=%s, Email=%s, Phone=%s,RoleID=%s,DepartmentID=%s,Salary=%s,Status=%s WHERE StaffID=%s"
                 cursor.execute(insert_sql, (name, email, phone, role,department,salary,status,staffID))
@@ -284,7 +281,6 @@ def delete(ID):
     s3_client = boto3.client("s3")
     image_file_name = "staff-id-" + str(ID) + "_image_file"
     try:
-        db_conn.ping()
         cursor = db_conn.cursor()   
         delete_sql = "DELETE FROM staff WHERE StaffID=%s"
         cursor.execute(delete_sql, (ID))
