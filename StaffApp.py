@@ -264,7 +264,7 @@ def EditStaff():
 @app.route('/delete/<string:ID>',methods=['POST','GET'])
 def delete(ID):
     s3_client = boto3.client("s3")
-    image_file_name = "staff-id-" + str(ID) + "_image_file"
+    image_file_name = "staff-id-" + str(ID) + "_image_file.jpg"
     try:
         cursor = db_conn.cursor()   
         delete_sql = "DELETE FROM staff WHERE StaffID=%s"
