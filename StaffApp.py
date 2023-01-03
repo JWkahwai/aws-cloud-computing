@@ -280,7 +280,7 @@ def delete(ID):
         cursor.close()
     
     response = s3_client.delete_object(Bucket=custombucket, Key=image_file_name)
-    return home()
+    return staffList()
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
