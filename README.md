@@ -15,24 +15,7 @@ PRE-STEP S3
 custombucket = "kongkahwai-bucket" (changable config.py)
 location : us-east-1
 turn off the Block all public access
-
-
-put this stuff into bucket policy
-
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "AllowPublicRead",
-            "Effect": "Allow",
-            "Principal": {
-                "AWS": "*"
-            },
-            "Action": "s3:GetObject",
-            "Resource": "arn:aws:s3:::kongkahwai-bucket/*"
-        }
-    ]
-}
+copy bucket.txt into bucket policy
 
 ##Create EC2 as usual
 
@@ -63,10 +46,6 @@ python3 StaffApp.py
 
 and click enter
 
-Back to ur EC2,  
-(IF U GOOD LUCK, find Public IPv4 address and click open address
-ELSE find Public IPv4 DNS and click open address)
-
 ***NOTES***
 1. All staff data have to insert one by one [due to the store file in cloud might cost]
 2. All data will be inserted into RDS exclude the image will store into S3 bucket. [although it can be store RDS :D]
@@ -79,4 +58,4 @@ Special Acknowledge
 2. DataTable
 3. SweetAlert.js
 4. AWS
-5. bloody flask
+5. flask
