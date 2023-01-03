@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS `department` (
   PRIMARY KEY (`DepartmentID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table staff.department: ~0 rows (approximately)
+-- Dumping data for table staff.department: ~3 rows (approximately)
 INSERT INTO `department` (`DepartmentID`, `DepartmentName`) VALUES
 	(1, 'HR department'),
 	(2, 'Production department'),
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `role` (
   PRIMARY KEY (`RoleID`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table staff.role: ~0 rows (approximately)
+-- Dumping data for table staff.role: ~4 rows (approximately)
 INSERT INTO `role` (`RoleID`, `RoleName`) VALUES
 	(1, 'Director'),
 	(2, 'Administrators'),
@@ -56,11 +56,14 @@ CREATE TABLE IF NOT EXISTS `staff` (
   `DepartmentID` int NOT NULL DEFAULT '0',
   `Salary` varchar(50) NOT NULL DEFAULT '',
   `Status` varchar(50) NOT NULL DEFAULT '',
-  `ImageURL` varchar(400) DEFAULT NULL,
   PRIMARY KEY (`StaffID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table staff.staff: ~0 rows (approximately)
+-- Dumping data for table staff.staff: ~3 rows (approximately)
+INSERT INTO `staff` (`StaffID`, `Name`, `Email`, `Phone`, `RoleID`, `DepartmentID`, `Salary`, `Status`) VALUES
+	(13, 'kahwai', 'kahwaikong123@gmail.com', '0128427621', 3, 1, '12,000', 'Active'),
+	(14, 'Gunaseelan', 'Gunaseelan@gmail.com', '0168378825', 1, 1, '8,000', 'Active'),
+	(15, 'wei liang', 'weiliang@gmail.com', '0123667982', 2, 1, '6,500', 'Active');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
