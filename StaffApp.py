@@ -170,7 +170,7 @@ def AddStaff():
             cursor.close()
         
         # Uplaod image file in S3 #
-        image_file_name = "staff-id-" + str(getID) + "_image_file"
+        image_file_name = "staff-id-" + str(getID) + "_image_file.jpg"
         s3 = boto3.resource('s3')
 
         try:
